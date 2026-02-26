@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Container from "@/components/layout/Container";
 import PostList from "@/components/blog/PostList";
-import { getAllPosts } from "@/lib/blog";
+import { getAllBlogPosts } from "@/lib/blog";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -9,8 +9,8 @@ export const metadata: Metadata = {
     "Writing about engineering leadership, technology, and building teams.",
 };
 
-export default function BlogPage() {
-  const posts = getAllPosts();
+export default async function BlogPage() {
+  const posts = await getAllBlogPosts();
 
   return (
     <Container>

@@ -2,10 +2,10 @@ import Container from "@/components/layout/Container";
 import Hero from "@/components/home/Hero";
 import LatestPosts from "@/components/home/LatestPosts";
 import AnimatedSection from "@/components/ui/AnimatedSection";
-import { getAllPosts } from "@/lib/blog";
+import { getAllBlogPosts } from "@/lib/blog";
 
-export default function Home() {
-  const posts = getAllPosts();
+export default async function Home() {
+  const posts = await getAllBlogPosts();
 
   return (
     <Container>

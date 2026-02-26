@@ -1,7 +1,8 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
-import type { Post, Frontmatter } from "@/types/blog";
+import type { Post, Frontmatter, BlogPost } from "@/types/blog";
+import { getSubstackPosts } from "@/lib/rss";
 
 const CONTENT_DIR = path.join(process.cwd(), "src/content/blog");
 
@@ -57,7 +58,7 @@ export function getPostBySlug(slug: string): Post | null {
   };
 }
 
-function getReadingTime(content: string): number {
+export function getReadingTime(content: string): number {
   const wordsPerMinute = 200;
   const words = content.trim().split(/\s+/).length;
   return Math.max(1, Math.ceil(words / wordsPerMinute));
@@ -69,4 +70,33 @@ export function formatDate(dateString: string): string {
     month: "long",
     day: "numeric",
   });
+}
+
+export async function getAllBlogPosts(): Promise<BlogPost[]> {
+  const [localPosts, substackPosts] = await Promise.all([
+    Promise.resolve(getAllPosts()),
+    getSubstackPosts(),
+  ]);
+
+  const local: BlogPost[] = localPosts.map((post) => ({
+    source: "local" as const,
+    slug: post.slug,
+    title: post.frontmatter.title,
+    date: post.frontmatter.date,
+    excerpt: post.frontmatter.excerpt,
+    tags: post.frontmatter.tags,
+    readingTime: post.frontmatter.readingTime ?? getReadingTime(post.content),
+  }));
+
+  const substack: BlogPost[] = substackPosts.map((post) => ({
+    source: "substack" as const,
+    title: post.title,
+    link: post.link,
+    date: post.date,
+    excerpt: post.excerpt,
+  }));
+
+  return [...local, ...substack].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
 }

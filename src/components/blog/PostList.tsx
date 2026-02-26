@@ -1,17 +1,19 @@
-import type { Post } from "@/types/blog";
+import type { BlogPost } from "@/types/blog";
 import PostCard from "./PostCard";
+import EmptyState from "./EmptyState";
 
-export default function PostList({ posts }: { posts: Post[] }) {
+export default function PostList({ posts }: { posts: BlogPost[] }) {
   if (posts.length === 0) {
-    return (
-      <p className="text-text-secondary">No posts yet. Check back soon.</p>
-    );
+    return <EmptyState />;
   }
 
   return (
     <div className="flex flex-col gap-6">
       {posts.map((post) => (
-        <PostCard key={post.slug} post={post} />
+        <PostCard
+          key={post.source === "local" ? post.slug : post.link}
+          post={post}
+        />
       ))}
     </div>
   );
