@@ -67,7 +67,7 @@ export default async function BlogPost({ params }: PageProps) {
 
         <hr className="my-8 border-border" />
 
-        <div className="prose prose-neutral max-w-none dark:prose-invert prose-headings:font-semibold prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent-hover">
+        <div className="prose prose-neutral prose-lg max-w-none dark:prose-invert prose-headings:font-display prose-headings:tracking-tight prose-p:leading-relaxed prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent-hover prose-blockquote:border-accent prose-blockquote:not-italic">
           <MDXRemote
             source={post.content}
             components={mdxComponents}

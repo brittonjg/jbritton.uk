@@ -33,6 +33,14 @@ function SocialIcon({ icon, className }: { icon: string; className?: string }) {
   }
 }
 
+/* Per-icon brand hover colours */
+const brandHoverColours: Record<string, string> = {
+  linkedin: "hover:text-[#0A66C2]",
+  github: "hover:text-text-primary",
+  instagram: "hover:text-[#E4405F]",
+  lastfm: "hover:text-[#D51007]",
+};
+
 interface SocialLinksProps {
   className?: string;
   iconClassName?: string;
@@ -47,7 +55,9 @@ export default function SocialLinks({ className, iconClassName }: SocialLinksPro
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-text-secondary transition-colors hover:text-accent"
+          className={`text-text-secondary transition-[color,transform] duration-200 hover:scale-110 hover:-rotate-3 ${
+            brandHoverColours[link.icon] || "hover:text-accent"
+          }`}
           aria-label={link.name}
         >
           <SocialIcon icon={link.icon} className={iconClassName} />
