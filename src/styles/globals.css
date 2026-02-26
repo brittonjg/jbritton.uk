@@ -1,0 +1,143 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "DM Serif Display", ui-serif, Georgia, serif;
+
+  /* Light mode (default) */
+  --color-background: #fafafa;
+  --color-surface: #ffffff;
+  --color-text-primary: #37474f;
+  --color-text-secondary: #6b7c87;
+  --color-text-tertiary: #94a1ad;
+  --color-accent: #d97706;
+  --color-accent-hover: #b45309;
+  --color-border: #e5e7eb;
+
+  /* Entrance animations */
+  --animate-fade-in-up: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  --animate-fade-in: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Scroll-triggered animation (applied via JS Intersection Observer) */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(0.75rem);
+}
+
+.animate-on-scroll.is-visible {
+  animation: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  .dark {
+    color-scheme: dark;
+    --color-background: #0f1219;
+    --color-surface: #171c28;
+    --color-text-primary: #e8eaed;
+    --color-text-secondary: #8b95a5;
+    --color-text-tertiary: #6b7685;
+    --color-accent: #f59e0b;
+    --color-accent-hover: #d97706;
+    --color-border: #2a3040;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-text-primary);
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Subtle amber glow in dark mode for atmospheric depth */
+  .dark body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at 50% 0%,
+      rgba(245, 158, 11, 0.03) 0%,
+      transparent 70%
+    );
+    z-index: -1;
+  }
+
+  a {
+    color: var(--color-accent);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  a:hover {
+    color: var(--color-accent-hover);
+  }
+
+  ::selection {
+    background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+    color: var(--color-text-primary);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Print styles for CV page */
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    background: white;
+    color: black;
+    font-size: 12pt;
+    line-height: 1.4;
+  }
+}
