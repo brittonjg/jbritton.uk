@@ -1,0 +1,142 @@
+{
+  "roles": [
+    {
+      "title": "Head of Engineering",
+      "company": {
+        "name": "Cuvva",
+        "url": "https://www.cuvva.com"
+      },
+      "startDate": "2025-10",
+      "location": "London, UK",
+      "description": "Leading the engineering organisation across product, platform and data teams. Responsible for technical strategy, team growth and delivery of insurance and fintech products.",
+      "highlights": [
+        "Leading engineering strategy and technical direction across the organisation",
+        "Driving engineering culture, standards and delivery practices"
+      ],
+      "tags": ["leadership", "strategy", "fintech", "insurance"]
+    },
+    {
+      "title": "Engineering Manager",
+      "company": {
+        "name": "Cuvva",
+        "url": "https://www.cuvva.com"
+      },
+      "startDate": "2021-11",
+      "endDate": "2025-10",
+      "location": "London, UK",
+      "description": "Managed the technical direction of the Growth and primary Product (On-Demand) teams, including delivery planning, team resourcing and rollout strategies. Engineering team responsibilities involving team structures, setting up partnerships and initiatives to improve Product and Discipline teams.",
+      "highlights": [
+        "Managed technical direction of the Growth and On-Demand teams, including delivery planning and rollout strategies",
+        "1:1s with all engineers, coaching, goal setting and skills benchmarking across a range of seniorities",
+        "Set up partnerships and initiatives to improve Product and Discipline teams",
+        "Partnered with the People team on developing a high-functioning Engineering department",
+        "Directly involved in incident management and resolution with engineers",
+        "Instrumental in developing recruitment and onboarding across all engineering disciplines"
+      ],
+      "tags": ["management", "product", "growth", "coaching"]
+    },
+    {
+      "title": "Engineering Manager",
+      "company": {
+        "name": "Monterosa",
+        "url": "https://www.monterosa.co"
+      },
+      "startDate": "2020-10",
+      "endDate": "2021-10",
+      "location": "London, UK",
+      "description": "Responsible for the group's technical vision and providing technical direction to team members. Planning the group's resourcing and project requirements.",
+      "highlights": [
+        "Responsible for the group's technical vision and technical direction",
+        "Acting as the Product Owner, working directly with senior stakeholders on developing the Product",
+        "Working directly with customers on scoping new projects and leading technical investigations",
+        "Managing technical members of the group, setting long-term goals and providing a healthy group culture",
+        "Planning the group's resourcing and project requirements"
+      ],
+      "tags": ["management", "product ownership", "leadership"]
+    },
+    {
+      "title": "Tech Lead",
+      "company": {
+        "name": "Monterosa",
+        "url": "https://www.monterosa.co"
+      },
+      "startDate": "2019-02",
+      "endDate": "2020-10",
+      "location": "London, UK",
+      "description": "Handling professional development for developers within the group. Leading customer discussions regarding technical integrations and working closely with Producers to provide technical assessments and feasibility for new ideas.",
+      "highlights": [
+        "Technical Lead on high-profile projects including Love Island UK/USA, Britain's Got Talent and other international projects",
+        "Leading customer discussions regarding technical integrations",
+        "Working closely with Producers to provide technical assessments and feasibility for new ideas",
+        "Helping to articulate difficult technical problems to non-technical members of the team",
+        "Handling professional development for developers within the group"
+      ],
+      "tags": ["tech lead", "mobile", "broadcast", "integrations"]
+    },
+    {
+      "title": "Head of Mobile",
+      "company": {
+        "name": "EYN",
+        "url": null
+      },
+      "startDate": "2017-10",
+      "endDate": "2019-01",
+      "location": "London, UK",
+      "description": "Responsible for designing, engineering and maintaining front-end services. Includes Android app, web application and RESTful API services.",
+      "highlights": [
+        "Designed, engineered and maintained Android, Web and API services",
+        "Facilitated team meetings and implemented agile principles to improve team efficiency",
+        "Responsible for recruitment interviews for other development roles",
+        "Implemented services in both Google Cloud and Amazon AWS",
+        "Developed React web application as a greenfield project based on continued client feedback"
+      ],
+      "tags": ["mobile", "android", "react", "aws", "gcp"]
+    },
+    {
+      "title": "Lead Android Developer",
+      "company": {
+        "name": "Tictrac",
+        "url": null
+      },
+      "startDate": "2016-05",
+      "endDate": "2017-10",
+      "location": "London, UK",
+      "description": "Provided leadership to a team of engineers on a multi-client application. Carried out user research including face-to-face customer interviews, prototyping and questionnaires.",
+      "highlights": [
+        "Led a team of engineers on the multi-client application",
+        "Carried out user research including customer interviews and prototyping",
+        "Travelled to Singapore for client integration and implementation",
+        "Delivered four client-customised applications",
+        "Conducted performance reviews for team members"
+      ],
+      "tags": ["android", "leadership", "user research"]
+    },
+    {
+      "title": "Android Engineer",
+      "company": {
+        "name": "Fanatix",
+        "url": null
+      },
+      "startDate": "2016-01",
+      "endDate": "2016-05",
+      "location": "London, UK",
+      "description": "Sole developer on all Android applications. Complete design and architecture update of the main Android application with a minimal viable product within a short delivery time.",
+      "highlights": [
+        "Sole developer on all Android applications",
+        "Complete architecture redesign and MVP delivery under tight deadlines",
+        "Worked closely with the designer on UX throughout development and testing"
+      ],
+      "tags": ["android", "mobile", "architecture"]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Brunel University",
+      "degree": "BSc (Hons) First Class",
+      "field": "Computer Science",
+      "startDate": "2012",
+      "endDate": "2015",
+      "location": "London, UK"
+    }
+  ]
+}
