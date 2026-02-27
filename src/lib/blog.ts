@@ -6,6 +6,14 @@ import { getSubstackPosts } from "@/lib/rss";
 
 const CONTENT_DIR = path.join(process.cwd(), "src/content/blog");
 
+export function getAllSlugs(): string[] {
+  if (!fs.existsSync(CONTENT_DIR)) return [];
+  return fs
+    .readdirSync(CONTENT_DIR)
+    .filter((f) => f.endsWith(".mdx"))
+    .map((f) => f.replace(/\.mdx$/, ""));
+}
+
 export function getAllPosts(): Post[] {
   if (!fs.existsSync(CONTENT_DIR)) return [];
 
@@ -47,6 +55,8 @@ export function getPostBySlug(slug: string): Post | null {
   const fileContent = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(fileContent);
   const frontmatter = data as Frontmatter;
+
+  if (!frontmatter.published) return null;
 
   return {
     slug,

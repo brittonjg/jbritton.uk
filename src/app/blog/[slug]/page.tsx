@@ -6,14 +6,16 @@ import remarkGfm from "remark-gfm";
 import Container from "@/components/layout/Container";
 import Tag from "@/components/ui/Tag";
 import { mdxComponents } from "@/components/blog/mdx";
-import { getAllPosts, getPostBySlug, formatDate } from "@/lib/blog";
+import { getAllSlugs, getPostBySlug, formatDate } from "@/lib/blog";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+export const dynamicParams = false;
+
 export function generateStaticParams() {
-  return getAllPosts().map((post) => ({ slug: post.slug }));
+  return getAllSlugs().map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({

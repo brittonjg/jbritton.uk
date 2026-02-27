@@ -1,2 +1,8 @@
+#:schema node_modules/wrangler/config-schema.json
 name = "jbritton"
-pages_build_output_dir = "./out"
+compatibility_date = "2026-02-27"
+
+[assets]
+directory = "./out"
+not_found_handling = "404-page"
+html_handling = "auto-trailing-slash"
