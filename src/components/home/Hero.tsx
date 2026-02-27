@@ -7,7 +7,7 @@ export default function Hero() {
     <section className="flex flex-col items-center justify-center py-32 text-center sm:py-40">
       <div className="animate-fade-in-up h-44 w-44 overflow-hidden rounded-full ring-2 ring-accent/20 ring-offset-4 ring-offset-background shadow-xl sm:h-48 sm:w-48">
         <Image
-          src="/images/selfie.png"
+          src="/images/selfie.jpg"
           alt={siteConfig.name}
           width={192}
           height={192}
