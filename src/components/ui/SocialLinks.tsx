@@ -1,7 +1,7 @@
 import { socialLinks } from "@/lib/constants";
 
 function SocialIcon({ icon, className }: { icon: string; className?: string }) {
-  const cn = className || "h-5 w-5";
+  const cn = `block ${className || "h-5 w-5"}`;
 
   switch (icon) {
     case "linkedin":
@@ -48,19 +48,24 @@ interface SocialLinksProps {
 
 export default function SocialLinks({ className, iconClassName }: SocialLinksProps) {
   return (
-    <div className={`flex items-center gap-4 ${className || ""}`}>
+    <div className={`flex items-center gap-1 ${className || ""}`}>
       {socialLinks.map((link) => (
         <a
           key={link.name}
           href={link.url}
           target="_blank"
           rel="noopener noreferrer"
-          className={`text-text-secondary transition-[color,transform] duration-200 hover:scale-110 hover:-rotate-3 ${
+          className={`group inline-flex h-11 w-11 items-center justify-center rounded-md text-text-secondary transition-colors duration-200 ${
             brandHoverColours[link.icon] || "hover:text-accent"
           }`}
           aria-label={link.name}
         >
-          <SocialIcon icon={link.icon} className={iconClassName} />
+          <span
+            aria-hidden="true"
+            className="transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3"
+          >
+            <SocialIcon icon={link.icon} className={iconClassName} />
+          </span>
         </a>
       ))}
     </div>

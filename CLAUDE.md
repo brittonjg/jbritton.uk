@@ -42,7 +42,7 @@ The site uses `output: "export"` in `next.config.ts`. This means:
   - Browser APIs (`window`, `document`, `localStorage`)
   - Framer Motion (`motion.*` components)
   - next-themes (`useTheme` hook)
-- Client components: `Header.tsx`, `Hero.tsx`, `AnimatedSection.tsx`, `ThemeToggle.tsx`
+- Client components: `Header.tsx`, `AnimatedSection.tsx`, `ThemeToggle.tsx`, `experience/Duration.tsx`, `experience/HighlightList.tsx`
 
 ## Styling
 
@@ -64,11 +64,21 @@ Always use the semantic colour tokens, never raw hex values:
 | `bg-surface` | Card / elevated surface background |
 | `text-text-primary` | Main body text |
 | `text-text-secondary` | Muted / meta text |
-| `text-accent` / `bg-accent` | Orange accent — links, markers, tags |
-| `text-accent-hover` | Hover state for accent elements |
+| `text-text-tertiary` | Dates, locations, durations |
+| `text-accent` / `bg-accent` | Accent for any **text**: links, active nav, company names, button fills |
+| `text-accent-hover` | Hover state for accent elements; also the text colour on `bg-accent-subtle` |
+| `bg-accent-decor` / `border-accent-decor` | Decorative accent only (dots, rings, underlines), never text |
+| `bg-accent-subtle` | Tag fill |
+| `text-on-accent` | Text on `bg-accent` (buttons, skip link) |
 | `border-border` | Borders and dividers |
 
-These automatically switch between light and dark mode via CSS variables.
+These automatically switch between light and dark mode via CSS variables. Every text token meets 4.5:1 contrast on `background` and `surface` in both themes. Check with a contrast calculation before changing a value.
+
+Other tokens: `rounded-md` (12px, buttons and cards) and `shadow-card` (add to every card, because the border alone is too faint).
+
+Type scale: `text-display` (60/60), `text-h1` (48/52) and `text-h2` (36/40) with `font-display`; `text-h3` (20/28, Quicksand 700); body 16/26 and `text-sm` 14/22. Body text is Quicksand 500. Section labels use the `eyebrow` utility.
+
+To force dark colours on one element (for example the homepage contact band), add the `dark` class to it.
 
 ### Dark Mode
 
@@ -100,6 +110,8 @@ Managed by `next-themes` with class strategy. The `.dark` class on `<html>` over
 - `Tag` — orange pill badge (`bg-accent/10 text-accent`)
 - `SocialLinks` — row of social SVG icons from `constants.ts`
 - `PostCard` — blog post preview card with hover lift
+- `Button` — primary / secondary call-to-action link (`ui/Button.tsx`)
+- `RoleCard` — role card used by the experience timeline and the homepage "Currently" section
 
 ## Content System
 
@@ -127,7 +139,8 @@ Reading time is calculated automatically (200 words/minute) — do not set it in
 - Location: `src/content/experience.json`
 - Types: `src/types/experience.ts` (Role, Company, Education, ExperienceData)
 - Loaded by: `src/lib/experience.ts`
-- Used by: `/experience` page (timeline) and `/cv` page (resume)
+- Used by: `/experience` page (timeline), `/cv` page (resume) and the homepage ("Currently" and "Career at a glance")
+- Date helpers live in `src/lib/dates.ts` (no data import, so safe for client components). "Present" durations are recalculated in the browser by `Duration.tsx`, because the static build would otherwise freeze them
 
 ### Constants
 
@@ -143,7 +156,8 @@ Reading time is calculated automatically (200 words/minute) — do not set it in
 3. **Post type cast**: In `blog.ts`, the `.filter()` result uses `as Post[]` because `readingTime` is optional in `Frontmatter` but always set during mapping
 4. **Font loading**: Quicksand is loaded via `next/font/local` with explicit paths to 5 `.ttf` files in `public/fonts/quicksand/`
 5. **Output tracing**: `outputFileTracingRoot: __dirname` in `next.config.ts` silences a workspace root warning
-6. **Substack RSS**: `src/lib/rss.ts` is a stub — `rss-parser` is installed but the integration is commented out. Set `SUBSTACK_URL` and uncomment to activate.
+6. **Share image**: `src/app/opengraph-image.tsx` renders the 1200×630 PNG at build time. Next.js writes it without a file extension, so `public/_headers` sets its `Content-Type` for Cloudflare
+7. **Substack RSS**: `src/lib/rss.ts` is a stub — `rss-parser` is installed but the integration is commented out. Set `SUBSTACK_URL` and uncomment to activate.
 
 ## Do Not
 
