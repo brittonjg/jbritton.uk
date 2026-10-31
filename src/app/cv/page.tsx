@@ -60,7 +60,7 @@ export default function CVPage() {
                   <ul className="mt-2 space-y-1 text-sm text-text-secondary">
                     {role.highlights.map((h, i) => (
                       <li key={i} className="flex items-start gap-2">
-                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent" />
+                        <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-accent-decor" />
                         {h}
                       </li>
                     ))}

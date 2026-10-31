@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { navItems } from "@/lib/constants";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import Button from "@/components/ui/Button";
 
 export default function Header() {
   const pathname = usePathname();
@@ -14,7 +15,7 @@ export default function Header() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur-md">
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded focus:bg-accent focus:px-3 focus:py-1.5 focus:text-sm focus:font-medium focus:text-white"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:z-50 focus:rounded focus:bg-accent focus:px-3 focus:py-1.5 focus:text-sm focus:font-semibold focus:text-on-accent"
       >
         Skip to content
       </a>
@@ -31,7 +32,7 @@ export default function Header() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative text-sm font-medium transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:bg-accent after:transition-all after:duration-200 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:rounded-sm ${
+                className={`relative text-sm font-medium transition-colors after:absolute after:-bottom-1 after:left-0 after:h-0.5 after:bg-accent-decor after:transition-all after:duration-200 hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:rounded-sm ${
                   pathname === item.href
                     ? "text-accent after:w-full"
                     : "text-text-secondary after:w-0 hover:after:w-full"
@@ -44,6 +45,9 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-2">
+          <Button href="/#contact" size="sm" className="mr-1">
+            Get in touch
+          </Button>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="rounded-lg p-2 text-text-secondary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent sm:hidden"
@@ -82,7 +86,7 @@ export default function Header() {
               key={item.href}
               href={item.href}
               onClick={() => setMobileOpen(false)}
-              className={`block py-2 text-sm font-medium transition-colors hover:text-accent focus-visible:outline-none focus-visible:text-accent ${
+              className={`block py-2 text-sm font-medium transition-colors hover:text-accent ${
                 pathname === item.href
                   ? "text-accent"
                   : "text-text-secondary"

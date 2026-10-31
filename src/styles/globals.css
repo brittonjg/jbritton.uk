@@ -7,15 +7,35 @@
   --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
   --font-display: "DM Serif Display", ui-serif, Georgia, serif;
 
-  /* Light mode (default) */
+  /* Light mode (default). Text tokens meet 4.5:1 on background and surface. */
   --color-background: #fafafa;
   --color-surface: #ffffff;
   --color-text-primary: #37474f;
-  --color-text-secondary: #6b7c87;
-  --color-text-tertiary: #94a1ad;
-  --color-accent: #d97706;
-  --color-accent-hover: #b45309;
+  --color-text-secondary: #55646d;
+  --color-text-tertiary: #64737d;
+  --color-accent: #b45309; /* text, links, active nav, button fills */
+  --color-accent-hover: #92400e;
+  --color-accent-decor: #d97706; /* non-text only: dots, rings, underlines */
+  --color-accent-subtle: #fef3c7; /* tag fill; pair with text-accent-hover */
+  --color-on-accent: #ffffff; /* text on bg-accent */
   --color-border: #e5e7eb;
+
+  /* Shape and elevation */
+  --radius-md: 12px; /* buttons and cards */
+  --shadow-card: 0 1px 2px rgba(15, 18, 25, 0.06), 0 1px 3px rgba(15, 18, 25, 0.08);
+
+  /* Type scale (font-size / line-height). Headings use font-display. */
+  --text-display: 3.75rem; /* 60/60 */
+  --text-display--line-height: 3.75rem;
+  --text-h1: 3rem; /* 48/52 */
+  --text-h1--line-height: 3.25rem;
+  --text-h2: 2.25rem; /* 36/40 */
+  --text-h2--line-height: 2.5rem;
+  --text-h3: 1.25rem; /* 20/28, Quicksand 700 */
+  --text-h3--line-height: 1.75rem;
+  --text-h3--font-weight: 700;
+  --text-base--line-height: 1.625rem; /* body 16/26 */
+  --text-sm--line-height: 1.375rem; /* small 14/22 */
 
   /* Entrance animations */
   --animate-fade-in-up: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
@@ -52,6 +72,16 @@
   animation: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
 }
 
+/* Eyebrow label: 12px, Quicksand 700, uppercase, +0.12em, accent */
+@utility eyebrow {
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
 @layer base {
   :root {
     color-scheme: light;
@@ -63,9 +93,12 @@
     --color-surface: #171c28;
     --color-text-primary: #e8eaed;
     --color-text-secondary: #8b95a5;
-    --color-text-tertiary: #6b7685;
+    --color-text-tertiary: #808b9b;
     --color-accent: #f59e0b;
-    --color-accent-hover: #d97706;
+    --color-accent-hover: #fbbf24;
+    --color-accent-decor: #d97706;
+    --color-accent-subtle: #2a2113;
+    --color-on-accent: #0f1219;
     --color-border: #2a3040;
   }
 
@@ -73,7 +106,8 @@
     background-color: var(--color-background);
     color: var(--color-text-primary);
     font-family: var(--font-sans);
-    line-height: 1.6;
+    font-weight: 500; /* Quicksand 400 is too thin at 14px and below */
+    line-height: 1.625;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
