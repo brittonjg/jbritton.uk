@@ -1,9 +1,11 @@
+import { cvPdfPath } from "@/lib/constants";
+
 export default function DownloadButton() {
   return (
     <a
-      href="/pdf/JBrittonCV.pdf"
+      href={cvPdfPath}
       download
-      className="no-print inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-accent-hover"
+      className="no-print inline-flex items-center gap-2 rounded-md bg-accent px-4 py-2 text-sm font-semibold text-on-accent transition-colors hover:bg-accent-hover hover:text-on-accent"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

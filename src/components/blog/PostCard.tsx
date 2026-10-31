@@ -5,13 +5,13 @@ import Tag from "@/components/ui/Tag";
 
 export default function PostCard({ post }: { post: BlogPost }) {
   const card = (
-    <article className="rounded-lg border border-border bg-surface p-6 transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-accent/30 group-hover:shadow-lg">
+    <article className="rounded-md border border-border bg-surface p-6 shadow-card transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-accent/30 group-hover:shadow-lg">
       <div className="flex items-start justify-between gap-3">
-        <h2 className="text-xl font-semibold text-text-primary transition-colors group-hover:text-accent">
+        <h2 className="text-h3 text-text-primary transition-colors group-hover:text-accent">
           {post.title}
         </h2>
         {post.source === "substack" && (
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-accent/15 bg-accent/8 px-2.5 py-0.5 text-xs font-medium text-accent/90">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-accent-decor/20 bg-accent-subtle px-2.5 py-0.5 text-xs font-semibold text-accent-hover">
             Substack
             <svg
               xmlns="http://www.w3.org/2000/svg"

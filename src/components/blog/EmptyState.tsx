@@ -5,6 +5,7 @@ export default function EmptyState() {
         xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 120 120"
         fill="none"
+        aria-hidden="true"
         className="h-28 w-28 text-text-tertiary"
       >
         {/* Notebook body */}
@@ -80,13 +81,13 @@ export default function EmptyState() {
           height="48"
           rx="2"
           transform="rotate(15 82 22)"
-          className="fill-accent/40"
+          className="fill-accent-decor/40"
         />
         {/* Pen tip */}
         <path
           d="M78.5 68 L81 76 L83.5 68"
           transform="rotate(15 81 72)"
-          className="fill-accent/60"
+          className="fill-accent-decor/60"
         />
         {/* Pen clip */}
         <rect
@@ -96,15 +97,10 @@ export default function EmptyState() {
           height="16"
           rx="0.75"
           transform="rotate(15 83.5 22)"
-          className="fill-accent/60"
+          className="fill-accent-decor/60"
         />
       </svg>
-      <h2 className="mt-6 font-display text-2xl text-text-primary">
-        Nothing here yet
-      </h2>
-      <p className="mt-2 text-text-secondary">
-        Posts are on the way &mdash; check back soon.
-      </p>
+      <p className="mt-6 text-text-secondary">First posts coming soon.</p>
     </div>
   );
 }

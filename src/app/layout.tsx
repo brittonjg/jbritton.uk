@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import { DM_Serif_Display } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { siteConfig } from "@/lib/constants";
+import { baseOpenGraph } from "@/lib/metadata";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import "@/styles/globals.css";
@@ -54,15 +55,11 @@ export const metadata: Metadata = {
   description: siteConfig.description,
   metadataBase: new URL(siteConfig.url),
   openGraph: {
+    ...baseOpenGraph,
     title: siteConfig.name,
-    description: siteConfig.description,
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    locale: "en_GB",
-    type: "website",
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: siteConfig.name,
     description: siteConfig.description,
   },

@@ -6,10 +6,14 @@ export const siteConfig = {
   url: "https://jbritton.uk",
 };
 
+export const linkedInUrl = "https://www.linkedin.com/in/jgbritton/";
+
+export const cvPdfPath = "/pdf/JBrittonCV.pdf";
+
 export const socialLinks = [
   {
     name: "LinkedIn",
-    url: "https://www.linkedin.com/in/jgbritton/",
+    url: linkedInUrl,
     icon: "linkedin",
   },
   {
@@ -31,7 +35,7 @@ export const socialLinks = [
 
 export const navItems = [
   { label: "Home", href: "/" },
-  { label: "Blog", href: "/blog" },
+  { label: "Writing", href: "/blog" },
   { label: "Experience", href: "/experience" },
   { label: "CV", href: "/cv" },
 ] as const;
