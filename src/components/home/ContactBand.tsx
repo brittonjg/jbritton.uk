@@ -15,7 +15,9 @@ export default function ContactBand() {
       <h2 id="contact-heading" className="font-display text-heading-2 text-inverse-text">
         Let&rsquo;s talk
       </h2>
-      {/* TODO(james): optional one-line invitation in text-inverse-text-secondary, e.g. what you're happy to be contacted about. */}
+      <p className="mt-3 text-inverse-text-secondary">
+        Happy to talk engineering leadership, or just compare notes.
+      </p>
       <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
         <Button href={linkedInUrl} tone="inverse" external>
           <svg
