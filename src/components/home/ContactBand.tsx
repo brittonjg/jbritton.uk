@@ -30,7 +30,6 @@ export default function ContactBand() {
           </svg>
           Message me on LinkedIn
         </Button>
-        {/* TODO(james): add email — no address exists in the repo yet, so no email button is shown. When you add it, use <Button variant="secondary" tone="inverse" href="mailto:…" external>. */}
       </div>
     </section>
   );
