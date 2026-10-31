@@ -184,41 +184,9 @@ Drop the new file at `public/pdf/JBrittonCV.pdf` (same filename). The download b
 
 ### Tailwind v4 (CSS-based config)
 
-There is **no `tailwind.config.js`**. Tailwind v4 is configured entirely in `src/styles/globals.css` using the `@theme` directive:
+There is **no `tailwind.config.js`**. Tailwind v4 is configured entirely in `src/styles/globals.css`: the `@theme` block holds the design system v2 tokens (colour, radius, shadows, layout, type styles and motion), and the `.dark` block overrides the colours for dark mode. That file is the only place colour values live.
 
-```css
-@import "tailwindcss";
-@plugin "@tailwindcss/typography";
-
-@theme {
-  --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
-  --color-background: #fafafa;
-  --color-surface: #ffffff;
-  --color-text-primary: #37474f;
-  --color-text-secondary: #6b7c87;
-  --color-accent: #d97706;
-  --color-accent-hover: #b45309;
-  --color-border: #e5e7eb;
-}
-```
-
-### Dark Mode
-
-Dark mode colours are set via CSS variable overrides on the `.dark` class:
-
-```css
-.dark {
-  --color-background: #111827;
-  --color-surface: #1f2937;
-  --color-text-primary: #e5e7eb;
-  --color-text-secondary: #9ca3af;
-  --color-accent: #f59e0b;
-  --color-accent-hover: #d97706;
-  --color-border: #374151;
-}
-```
-
-Use the semantic tokens in Tailwind classes (e.g. `text-text-primary`, `bg-surface`, `border-border`, `text-accent`) — they automatically switch between light and dark.
+Use the semantic utilities (e.g. `text-text-primary`, `bg-surface`, `border-border-control`, `text-accent`, `text-heading-1`, `duration-fast`), which switch between light and dark automatically. The full token reference is in `CLAUDE.md`.
 
 ### Adding a New Colour
 
@@ -235,7 +203,7 @@ Use the semantic tokens in Tailwind classes (e.g. `text-text-primary`, `bg-surfa
 - **Filenames**: PascalCase (`PostCard.tsx`, `AnimatedSection.tsx`)
 - **Grouping**: By feature area (`blog/`, `experience/`, `cv/`, `home/`, `layout/`, `ui/`)
 - **Server by default**: All components are server components unless they need client features
-- **Client components**: Add `"use client"` only when using React hooks, browser APIs, or Framer Motion
+- **Client components**: Add `"use client"` only when using React hooks or browser APIs
 - **Props**: Define interfaces inline in the component file. Use shared types from `src/types/` when the type is used across multiple components.
 - **Icons**: SVG elements inline — no external icon libraries
 
@@ -243,11 +211,16 @@ Use the semantic tokens in Tailwind classes (e.g. `text-text-primary`, `bg-surfa
 
 | Component | Path | Description |
 |---|---|---|
-| `Container` | `layout/Container.tsx` | Max-width wrapper (`max-w-3xl px-6`) |
-| `AnimatedSection` | `ui/AnimatedSection.tsx` | Framer Motion scroll-triggered fade-in |
-| `Tag` | `ui/Tag.tsx` | Orange pill badge for labels |
+| `Container` | `layout/Container.tsx` | Max-width wrapper (`max-w-reading`, or `width="wide"`) |
+| `Header` / `MobileMenu` | `layout/` | One nav; collapses into a panel under 640px |
+| `Footer` | `layout/Footer.tsx` | © year and social text links |
+| `SkipLink` | `ui/SkipLink.tsx` | Skip to main content |
+| `Button` / `TextLink` | `ui/` | Call-to-action buttons (all states) and arrow links |
+| `AnimatedSection` | `ui/AnimatedSection.tsx` | Scroll-triggered section reveal (CSS, plays once) |
+| `Tag` | `ui/Tag.tsx` | Amber pill badge for labels |
 | `SocialLinks` | `ui/SocialLinks.tsx` | Row of social media SVG icons |
-| `ThemeToggle` | `ui/ThemeToggle.tsx` | Dark/light mode toggle button |
+| `ThemeToggle` | `ui/ThemeToggle.tsx` | Dark/light toggle with crossfade |
+| `ExperienceTimeline` / `ExperienceEntry` | `experience/` | Experience page timeline that draws with scroll |
 
 ---
 

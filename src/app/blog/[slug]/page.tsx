@@ -1,10 +1,10 @@
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import remarkGfm from "remark-gfm";
 import Container from "@/components/layout/Container";
 import Tag from "@/components/ui/Tag";
+import TextLink from "@/components/ui/TextLink";
 import { mdxComponents } from "@/components/blog/mdx";
 import { getAllSlugs, getPostBySlug, formatDate } from "@/lib/blog";
 
@@ -40,22 +40,19 @@ export default async function BlogPost({ params }: PageProps) {
   return (
     <Container>
       <article className="py-16">
-        <Link
-          href="/blog"
-          className="text-sm text-text-secondary transition-colors hover:text-accent"
-        >
-          &larr; Back to writing
-        </Link>
+        <TextLink href="/blog" arrow="back">
+          Back to writing
+        </TextLink>
 
         <header className="mt-8">
-          <h1 className="font-display text-3xl leading-tight text-text-primary sm:text-4xl">
+          <h1 className="font-display text-heading-2 text-text-primary sm:text-heading-1">
             {post.frontmatter.title}
           </h1>
-          <div className="mt-4 flex items-center gap-2 text-sm text-text-tertiary">
+          <div className="mt-4 flex items-center gap-2 text-meta text-text-tertiary">
             <time dateTime={post.frontmatter.date}>
               {formatDate(post.frontmatter.date)}
             </time>
-            <span>&middot;</span>
+            <span aria-hidden="true">&middot;</span>
             <span>{post.frontmatter.readingTime} min read</span>
           </div>
           {post.frontmatter.tags.length > 0 && (
@@ -69,7 +66,7 @@ export default async function BlogPost({ params }: PageProps) {
 
         <hr className="my-8 border-border" />
 
-        <div className="prose prose-neutral prose-lg max-w-none dark:prose-invert prose-headings:font-display prose-headings:tracking-tight prose-p:leading-relaxed prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent-hover prose-blockquote:border-accent prose-blockquote:not-italic">
+        <div className="prose prose-neutral prose-lg max-w-none dark:prose-invert prose-headings:font-display prose-headings:tracking-tight prose-p:leading-relaxed prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent-hover prose-blockquote:border-accent-decor prose-blockquote:not-italic">
           <MDXRemote
             source={post.content}
             components={mdxComponents}

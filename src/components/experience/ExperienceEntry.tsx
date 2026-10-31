@@ -3,33 +3,32 @@ import { formatMonthYear, getDuration } from "@/lib/dates";
 import Duration from "./Duration";
 import RoleCard from "./RoleCard";
 
-interface TimelineEntryProps {
+interface ExperienceEntryProps {
   role: Role;
   isCurrent?: boolean;
 }
 
 /*
- * One role, rendered once. Mobile: dates stacked above the card.
- * Desktop (md+): dates in a 9rem left rail, card in the second column.
- * The line and dot sit on the rail's edge (left edge on mobile).
+ * One role on the Experience timeline.
+ * From 640px: a 104px right-aligned dates column, a 24px rail column with a
+ * 12px node, then the role card.
+ * Under 640px: a 16px rail column on the left, dates above the card.
  */
-export default function TimelineEntry({ role, isCurrent }: TimelineEntryProps) {
+export default function ExperienceEntry({ role, isCurrent = false }: ExperienceEntryProps) {
   return (
-    <li className="relative pb-10 pl-7 last:pb-0 md:grid md:grid-cols-[9rem_1fr] md:pl-0">
-      {/* Thin border-coloured line */}
+    <li className="experience-entry relative grid grid-cols-entry-compact gap-x-4 gap-y-3 sm:grid-cols-entry sm:gap-y-0">
       <span
         aria-hidden="true"
-        className="absolute top-0 bottom-0 left-0 w-px bg-border md:left-[9rem]"
-      />
-      {/* Outlined dot */}
-      <span
-        aria-hidden="true"
-        className={`absolute top-1.5 left-0 h-3 w-3 -translate-x-1/2 rounded-full border-2 border-accent-decor bg-background md:left-[9rem] ${
-          isCurrent ? "ring-4 ring-accent-decor/15" : ""
-        }`}
-      />
+        className="relative z-10 col-start-1 row-start-1 flex justify-center pt-1 sm:col-start-2"
+      >
+        <span
+          className={`experience-node size-3 rounded-full border-2 border-accent-decor bg-background ${
+            isCurrent ? "ring-4 ring-accent-subtle" : ""
+          }`}
+        />
+      </span>
 
-      <div className="mb-3 text-sm md:mb-0 md:pr-8 md:text-right">
+      <div className="col-start-2 row-start-1 text-meta sm:col-start-1 sm:text-right">
         {/* Each date is unbreakable so ranges only wrap at the dash */}
         <p className="text-text-secondary">
           <span className="whitespace-nowrap">{formatMonthYear(role.startDate)}</span>{" "}
@@ -46,7 +45,7 @@ export default function TimelineEntry({ role, isCurrent }: TimelineEntryProps) {
         </p>
       </div>
 
-      <div className="min-w-0 md:pl-8">
+      <div className="col-start-2 row-start-2 min-w-0 sm:col-start-3 sm:row-start-1">
         <RoleCard role={role} visibleHighlights={3} />
       </div>
     </li>

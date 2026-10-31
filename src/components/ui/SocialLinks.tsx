@@ -1,7 +1,7 @@
 import { socialLinks } from "@/lib/constants";
 
 function SocialIcon({ icon, className }: { icon: string; className?: string }) {
-  const cn = `block ${className || "h-5 w-5"}`;
+  const cn = `block ${className || "size-5"}`;
 
   switch (icon) {
     case "linkedin":
@@ -33,41 +33,35 @@ function SocialIcon({ icon, className }: { icon: string; className?: string }) {
   }
 }
 
-/* Per-icon brand hover colours */
-const brandHoverColours: Record<string, string> = {
-  linkedin: "hover:text-[#0A66C2]",
-  github: "hover:text-text-primary",
-  instagram: "hover:text-[#E4405F]",
-  lastfm: "hover:text-[#D51007]",
-};
-
 interface SocialLinksProps {
   className?: string;
   iconClassName?: string;
 }
 
+/*
+ * Icon row. On hover an accent-subtle 44×44 tile appears behind the icon and
+ * the glyph turns text-primary. Footer-only links (Last.fm) are left out.
+ */
 export default function SocialLinks({ className, iconClassName }: SocialLinksProps) {
+  const links = socialLinks.filter((link) => !("footerOnly" in link && link.footerOnly));
+
   return (
-    <div className={`flex items-center gap-1 ${className || ""}`}>
-      {socialLinks.map((link) => (
-        <a
-          key={link.name}
-          href={link.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`group inline-flex h-11 w-11 items-center justify-center rounded-md text-text-secondary transition-colors duration-200 ${
-            brandHoverColours[link.icon] || "hover:text-accent"
-          }`}
-          aria-label={link.name}
-        >
-          <span
-            aria-hidden="true"
-            className="transition-transform duration-200 group-hover:scale-110 group-hover:-rotate-3"
+    <ul className={`flex items-center gap-1 ${className || ""}`}>
+      {links.map((link) => (
+        <li key={link.name}>
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex size-11 items-center justify-center rounded-md text-text-secondary transition-colors duration-fast hover:bg-accent-subtle hover:text-text-primary"
+            aria-label={link.name}
           >
-            <SocialIcon icon={link.icon} className={iconClassName} />
-          </span>
-        </a>
+            <span aria-hidden="true">
+              <SocialIcon icon={link.icon} className={iconClassName} />
+            </span>
+          </a>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }

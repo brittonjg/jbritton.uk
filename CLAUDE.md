@@ -42,7 +42,7 @@ The site uses `output: "export"` in `next.config.ts`. This means:
   - Browser APIs (`window`, `document`, `localStorage`)
   - Framer Motion (`motion.*` components)
   - next-themes (`useTheme` hook)
-- Client components: `Header.tsx`, `AnimatedSection.tsx`, `ThemeToggle.tsx`, `experience/Duration.tsx`, `experience/HighlightList.tsx`
+- Client components: `Header.tsx`, `AnimatedSection.tsx`, `ThemeToggle.tsx`, `experience/Duration.tsx`, `experience/HighlightList.tsx`, `experience/ExperienceTimeline.tsx`
 
 ## Styling
 
@@ -56,29 +56,51 @@ There is **no `tailwind.config.js` or `tailwind.config.ts`**. Tailwind v4 is con
 
 ### Colour Tokens
 
-Always use the semantic colour tokens, never raw hex values:
+Always use the semantic colour tokens, never raw hex values. `globals.css` is the only file with colour values (plus `src/lib/tokens.ts`, a light-theme mirror for the build-time share image).
 
 | Token | Usage |
 |---|---|
 | `bg-background` | Page background |
-| `bg-surface` | Card / elevated surface background |
-| `text-text-primary` | Main body text |
-| `text-text-secondary` | Muted / meta text |
-| `text-text-tertiary` | Dates, locations, durations |
-| `text-accent` / `bg-accent` | Accent for any **text**: links, active nav, company names, button fills |
-| `text-accent-hover` | Hover state for accent elements; also the text colour on `bg-accent-subtle` |
-| `bg-accent-decor` / `border-accent-decor` | Decorative accent only (dots, rings, underlines), never text |
-| `bg-accent-subtle` | Tag fill |
-| `text-on-accent` | Text on `bg-accent` (buttons, skip link) |
-| `border-border` | Borders and dividers |
+| `bg-surface` | Cards, header |
+| `border-border` | Decorative dividers only |
+| `border-border-strong` | Edges that must pass 3:1 (empty-state outline) |
+| `border-border-control` | Secondary button edge (soft amber in dark mode) |
+| `border-border-control-inverse` | Secondary button on the contact band |
+| `text-text-primary` | Headings, body |
+| `text-text-secondary` | Supporting copy |
+| `text-text-tertiary` | Dates, meta |
+| `text-accent` / `bg-accent` | Accent for any **text**: links, active nav, company names, primary button fill |
+| `text-accent-hover` / `bg-accent-hover` | Hover and pressed |
+| `bg-accent-decor` / `border-accent-decor` | Non-text marks only (dots, rings, rails, underlines), never text |
+| `bg-accent-subtle` | Tag fill, icon-button hover tile |
+| `text-on-accent-subtle` | Text on `bg-accent-subtle` |
+| `text-on-accent` | Text on `bg-accent` |
+| `bg-disabled-surface` / `text-disabled-text` | Disabled buttons |
+| `bg-inverse-surface`, `text-inverse-text`, `text-inverse-text-secondary` | Contact band (dark in both themes) |
+| `bg-inverse-accent`, `bg-inverse-accent-hover`, `text-on-inverse-accent` | Primary button on the contact band (`<Button tone="inverse">`) |
 
-These automatically switch between light and dark mode via CSS variables. Every text token meets 4.5:1 contrast on `background` and `surface` in both themes. Check with a contrast calculation before changing a value.
+These switch between light and dark mode via CSS variables. Every text token meets 4.5:1 on `background` and `surface` in both themes; control edges, rails and icons meet 3:1. Check with a contrast calculation before changing a value.
 
-Other tokens: `rounded-md` (12px, buttons and cards) and `shadow-card` (add to every card, because the border alone is too faint).
+### Other Tokens
 
-Type scale: `text-display` (60/60), `text-h1` (48/52) and `text-h2` (36/40) with `font-display`; `text-h3` (20/28, Quicksand 700); body 16/26 and `text-sm` 14/22. Body text is Quicksand 500. Section labels use the `eyebrow` utility.
+- **Radius**: `rounded-sm` 6px (link focus outlines, skip link), `rounded-md` 12px (buttons, icon tiles), `rounded-lg` 16px (cards, panels, contact band), `rounded-full` (tags, avatar, dots).
+- **Shadows**: `shadow-card` (every card), `shadow-raised` (post card hover, open mobile menu), `shadow-header` (scrolled header), `shadow-avatar`, `shadow-control` (none in light, amber glow in dark), `shadow-control-inverse`.
+- **Spacing**: 4px base. Padding, margin and gap stay on 1 2 3 4 5 6 7 8 10 12 16 24 (4–96px). No `0.5`, `1.5`, `2.5` or `3.5` steps.
+- **Layout**: `max-w-reading` 768px (`Container` default), `max-w-wide` 1040px (`<Container width="wide">`, Experience page), header `h-17` (68px), avatar 160px (144px on phones), date rail 104px (`grid-cols-entry`). Every interactive element is at least 44×44px (`min-h-11`, `size-11`; inline links use the `tap-target` utility).
+- **Motion**: `duration-fast` 150ms (hover, colour, press, arrow nudge), `duration-base` 250ms (opening things, theme crossfade, header shadow), `duration-slow` 400ms (things appearing), `ease-standard` for everything (also the default for `transition`).
 
-To force dark colours on one element (for example the homepage contact band), add the `dark` class to it.
+### Type Styles
+
+DM Serif Display styles are paired with `font-display`: `text-display` (60/60, −0.5px), `text-heading-1` (48/52), `text-heading-2` (36/40), `text-heading-section` (32/37), `text-title-post` (24/29), `text-mark` (22/28).
+
+Quicksand styles carry their own weight: `text-heading-3` (20/28, 700), `text-title` (16/22, 700), `text-body-large` (18/30, 500), `text-body` (16/26, 500, the body default), `text-label` (15/22, 600), `text-nav` (15/20, 600), `text-button` (15/20, 700), `text-small` (14/22, 500), `text-meta` (14/22, 600, use with `text-text-tertiary`), `text-tag` (12/16, 600). Section labels use the `eyebrow` utility. Never use Quicksand 400 at 14px or smaller.
+
+### Motion Rules
+
+- Animate only `opacity` and `transform` (plus grid-row height for panels that open).
+- Entrances play once; nothing loops (the optional "Currently" dot pulse is off by default).
+- All movement sits inside `@media (prefers-reduced-motion: no-preference)` or is removed by the reduced-motion block in `globals.css`.
+- Content must be visible if an animation never runs: hidden starting states are added by script, never in the markup.
 
 ### Dark Mode
 
@@ -100,18 +122,27 @@ Managed by `next-themes` with class strategy. The `.dark` class on `<html>` over
 - **Organisation**: Group by feature (`blog/`, `experience/`, `cv/`, `home/`, `layout/`, `ui/`)
 - **Props interfaces**: Define inline in the component file. Only use `src/types/` for interfaces shared across multiple files.
 - **Icons**: Inline SVG elements — do not add icon libraries (Lucide, Heroicons, etc.)
-- **Animations**: Use `AnimatedSection` wrapper for scroll-triggered fade-in. Framer Motion for anything more complex.
-- **Layout wrapping**: Use `Container` component (`max-w-3xl px-6`) for page content width
+- **Animations**: CSS only (keyframes and classes in `globals.css`). Use the `AnimatedSection` wrapper for the scroll-triggered section reveal. Framer Motion is not installed.
+- **Layout wrapping**: Use `Container` component (`max-w-reading px-6`, or `width="wide"`) for page content width
+- **Names**: components and their CSS class names match (`Header` → `.header`, `MobileMenu` → `.mobile-menu`, `SkipLink` → `.skip-link`, and so on)
 
 ### Key Reusable Components
 
 - `Container` — max-width content wrapper, used on every page
-- `AnimatedSection` — Framer Motion `whileInView` fade-in with configurable delay
-- `Tag` — orange pill badge (`bg-accent/10 text-accent`)
-- `SocialLinks` — row of social SVG icons from `constants.ts`
-- `PostCard` — blog post preview card with hover lift
-- `Button` — primary / secondary call-to-action link (`ui/Button.tsx`)
-- `RoleCard` — role card used by the experience timeline and the homepage "Currently" section
+- `SkipLink` — first focusable element, jumps to `<main id="main-content">`
+- `Header` + `MobileMenu` — one copy of the nav; under 640px it collapses into a grid-row panel. `is-scrolled` adds `shadow-header` past 8px
+- `Footer` — © year, then text links to every social profile
+- `Button` — primary / secondary, `tone="inverse"` for the contact band, with `disabled` and `loading` states (`ui/Button.tsx`)
+- `TextLink` — accent "→" link with the arrow nudge
+- `Tag` — `bg-accent-subtle text-on-accent-subtle` pill
+- `SectionHeader` — eyebrow plus optional section title
+- `SocialLinks` — icon row (Last.fm is footer-only, flagged `footerOnly` in `constants.ts`)
+- `ThemeToggle` — label names the theme it switches to; View Transition crossfade
+- `AnimatedSection` — section reveal (fade and rise 8px, once)
+- `Hero`, `TimelineRow`, `ContactBand` — homepage pieces
+- `RoleCard` — role card (not a link, never lifts) used by the Experience page and the homepage "Currently" section
+- `ExperienceTimeline` + `ExperienceEntry` — Experience page rail that draws with scroll (`--rail-fill`)
+- `PostCard` — blog post preview; the only card that lifts on hover
 
 ## Content System
 

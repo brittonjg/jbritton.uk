@@ -6,6 +6,7 @@ import { siteConfig } from "@/lib/constants";
 import { baseOpenGraph } from "@/lib/metadata";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import SkipLink from "@/components/ui/SkipLink";
 import "@/styles/globals.css";
 
 const quicksand = localFont({
@@ -73,6 +74,7 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${quicksand.variable} ${dmSerif.variable}`} suppressHydrationWarning>
       <body className="font-sans antialiased">
+        <SkipLink />
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <div className="flex min-h-screen flex-col">
             <Header />

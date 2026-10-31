@@ -3,76 +3,154 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
+/*
+ * Design system v2 tokens. This file is the only place raw colour values
+ * belong; components use the semantic utilities these tokens generate.
+ */
 @theme {
   --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
   --font-display: "DM Serif Display", ui-serif, Georgia, serif;
 
-  /* Light mode (default). Text tokens meet 4.5:1 on background and surface. */
-  --color-background: #fafafa;
-  --color-surface: #ffffff;
-  --color-text-primary: #37474f;
-  --color-text-secondary: #55646d;
-  --color-text-tertiary: #64737d;
-  --color-accent: #b45309; /* text, links, active nav, button fills */
-  --color-accent-hover: #92400e;
-  --color-accent-decor: #d97706; /* non-text only: dots, rings, underlines */
-  --color-accent-subtle: #fef3c7; /* tag fill; pair with text-accent-hover */
-  --color-on-accent: #ffffff; /* text on bg-accent */
-  --color-border: #e5e7eb;
+  /* ---------------------------------------------------------------------
+   * Colour: light theme (default). Dark values live in the .dark block.
+   * Every text token meets 4.5:1 on background and surface; border-strong,
+   * border-control and accent-decor meet 3:1 for non-text marks.
+   * ------------------------------------------------------------------- */
+  --color-background: #fafafa; /* page ground */
+  --color-surface: #ffffff; /* cards, header */
+  --color-border: #e5e7eb; /* decorative dividers only */
+  --color-border-strong: #86929a; /* edges that must pass 3:1 */
+  --color-border-control: #86929a; /* secondary button edge */
+  --color-border-control-inverse: rgba(245, 158, 11, 0.65); /* secondary button on the contact band */
+  --color-text-primary: #37474f; /* headings, body */
+  --color-text-secondary: #55646d; /* supporting copy */
+  --color-text-tertiary: #64737d; /* dates, meta */
+  --color-accent: #b45309; /* text, links, primary fill */
+  --color-accent-hover: #92400e; /* hover and pressed */
+  --color-accent-decor: #d97706; /* non-text marks only: dots, rings, rails, underlines */
+  --color-accent-subtle: #fef3c7; /* tag fill, icon-button hover tile */
+  --color-on-accent-subtle: #92400e; /* text on accent-subtle */
+  --color-on-accent: #ffffff; /* text on accent */
+  --color-disabled-surface: #eef0f2; /* disabled button fill */
+  --color-disabled-text: #7a8790; /* disabled button label */
+  --color-inverse-surface: #171c28; /* contact band */
+  --color-inverse-text: #e8eaed; /* band headings */
+  --color-inverse-text-secondary: #8b95a5; /* band body */
+  --color-inverse-accent: #f59e0b; /* band primary button */
+  --color-inverse-accent-hover: #fbbf24;
+  --color-on-inverse-accent: #0f1219; /* text on inverse-accent */
 
-  /* Shape and elevation */
-  --radius-md: 12px; /* buttons and cards */
+  /* ---------------------------------------------------------------------
+   * Radius: sm for link focus outlines and the skip link, md for buttons,
+   * lg for cards, panels and the contact band. Tags, avatar and dots use
+   * rounded-full.
+   * ------------------------------------------------------------------- */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+
+  /* ---------------------------------------------------------------------
+   * Elevation. shadow-control changes between themes, so it points at a
+   * variable that the .dark block overrides.
+   * ------------------------------------------------------------------- */
   --shadow-card: 0 1px 2px rgba(15, 18, 25, 0.06), 0 1px 3px rgba(15, 18, 25, 0.08);
+  --shadow-raised: 0 12px 32px -8px rgba(15, 18, 25, 0.18); /* post card hover, open mobile menu */
+  --shadow-header: 0 4px 16px -8px rgba(15, 18, 25, 0.18); /* header once the page has scrolled */
+  --shadow-avatar: 0 16px 40px -12px rgba(15, 18, 25, 0.35);
+  --shadow-control: var(--control-shadow);
+  --shadow-control-inverse: 0 0 0 3px rgba(245, 158, 11, 0.12), 0 6px 18px -6px rgba(245, 158, 11, 0.35);
 
-  /* Type scale (font-size / line-height). Headings use font-display. */
-  --text-display: 3.75rem; /* 60/60 */
+  /* ---------------------------------------------------------------------
+   * Layout. Spacing uses Tailwind's 4px base; stay on the scale
+   * 1 2 3 4 5 6 7 8 10 12 16 24 (4–96px) for padding, margin and gap.
+   * Header 68px = h-17, avatar 160px = size-40 (144px = size-36 on phones),
+   * date rail 104px = w-26, tap targets 44px = size-11 / min-h-11.
+   * ------------------------------------------------------------------- */
+  --container-reading: 48rem; /* 768px */
+  --container-wide: 65rem; /* 1040px, Experience page */
+  --grid-template-columns-entry: 6.5rem 1.5rem minmax(0, 1fr); /* dates, rail, card */
+  --grid-template-columns-entry-compact: 1rem minmax(0, 1fr); /* rail, content */
+  --grid-template-columns-timeline-row: 0.75rem 7.5rem minmax(0, 1fr); /* ring, years, title */
+  --grid-template-columns-timeline-row-compact: 0.75rem minmax(0, 1fr); /* ring, stacked text */
+
+  /* ---------------------------------------------------------------------
+   * Type styles. Font size / line height (/ weight / tracking).
+   * The DM Serif Display styles are paired with `font-display`.
+   * ------------------------------------------------------------------- */
+  --text-display: 3.75rem; /* 60/60, DM Serif Display */
   --text-display--line-height: 3.75rem;
-  --text-h1: 3rem; /* 48/52 */
-  --text-h1--line-height: 3.25rem;
-  --text-h2: 2.25rem; /* 36/40 */
-  --text-h2--line-height: 2.5rem;
-  --text-h3: 1.25rem; /* 20/28, Quicksand 700 */
-  --text-h3--line-height: 1.75rem;
-  --text-h3--font-weight: 700;
-  --text-base--line-height: 1.625rem; /* body 16/26 */
-  --text-sm--line-height: 1.375rem; /* small 14/22 */
+  --text-display--letter-spacing: -0.5px;
+  --text-heading-1: 3rem; /* 48/52, DM Serif Display */
+  --text-heading-1--line-height: 3.25rem;
+  --text-heading-2: 2.25rem; /* 36/40, DM Serif Display */
+  --text-heading-2--line-height: 2.5rem;
+  --text-heading-section: 2rem; /* 32/37, DM Serif Display */
+  --text-heading-section--line-height: 2.3125rem;
+  --text-title-post: 1.5rem; /* 24/29, DM Serif Display */
+  --text-title-post--line-height: 1.8125rem;
+  --text-mark: 1.375rem; /* 22/28, DM Serif Display */
+  --text-mark--line-height: 1.75rem;
+  --text-heading-3: 1.25rem; /* 20/28, Quicksand 700 */
+  --text-heading-3--line-height: 1.75rem;
+  --text-heading-3--font-weight: 700;
+  --text-title: 1rem; /* 16/22, Quicksand 700 */
+  --text-title--line-height: 1.375rem;
+  --text-title--font-weight: 700;
+  --text-body-large: 1.125rem; /* 18/30, Quicksand 500 */
+  --text-body-large--line-height: 1.875rem;
+  --text-body-large--font-weight: 500;
+  --text-body: 1rem; /* 16/26, Quicksand 500 */
+  --text-body--line-height: 1.625rem;
+  --text-body--font-weight: 500;
+  --text-label: 0.9375rem; /* 15/22, Quicksand 600 */
+  --text-label--line-height: 1.375rem;
+  --text-label--font-weight: 600;
+  --text-nav: 0.9375rem; /* 15/20, Quicksand 600 */
+  --text-nav--line-height: 1.25rem;
+  --text-nav--font-weight: 600;
+  --text-button: 0.9375rem; /* 15/20, Quicksand 700 */
+  --text-button--line-height: 1.25rem;
+  --text-button--font-weight: 700;
+  --text-small: 0.875rem; /* 14/22, Quicksand 500 */
+  --text-small--line-height: 1.375rem;
+  --text-small--font-weight: 500;
+  --text-meta: 0.875rem; /* 14/22, Quicksand 600, tertiary colour */
+  --text-meta--line-height: 1.375rem;
+  --text-meta--font-weight: 600;
+  --text-tag: 0.75rem; /* 12/16, Quicksand 600 */
+  --text-tag--line-height: 1rem;
+  --text-tag--font-weight: 600;
 
-  /* Entrance animations */
-  --animate-fade-in-up: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-  --animate-fade-in: fade-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  /* ---------------------------------------------------------------------
+   * Motion. One curve for everything.
+   *   duration-fast  hover, colour, press, arrow nudge
+   *   duration-base  opening things, theme crossfade, header shadow
+   *   duration-slow  things appearing
+   * ------------------------------------------------------------------- */
+  --ease-standard: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --transition-duration-fast: 150ms;
+  --transition-duration-base: 250ms;
+  --transition-duration-slow: 400ms;
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(0.75rem);
+/* Inline links keep their line box but get a 44×44px minimum hit area */
+@utility tap-target {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-/* Scroll-triggered animation (applied via JS Intersection Observer) */
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(0.75rem);
-}
-
-.animate-on-scroll.is-visible {
-  animation: fade-in-up 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
-}
-
-/* Eyebrow label: 12px, Quicksand 700, uppercase, +0.12em, accent */
+/* Eyebrow label: 12/16, Quicksand 700, uppercase, +0.12em, accent */
 @utility eyebrow {
   font-size: 0.75rem;
   line-height: 1rem;
@@ -85,12 +163,16 @@
 @layer base {
   :root {
     color-scheme: light;
+    --control-shadow: 0 0 transparent; /* shadow-control is "none" in light */
   }
 
   .dark {
     color-scheme: dark;
     --color-background: #0f1219;
     --color-surface: #171c28;
+    --color-border: #2a3040;
+    --color-border-strong: #627086;
+    --color-border-control: rgba(245, 158, 11, 0.6); /* soft amber outline */
     --color-text-primary: #e8eaed;
     --color-text-secondary: #8b95a5;
     --color-text-tertiary: #808b9b;
@@ -98,16 +180,22 @@
     --color-accent-hover: #fbbf24;
     --color-accent-decor: #d97706;
     --color-accent-subtle: #2a2113;
+    --color-on-accent-subtle: #fbbf24;
     --color-on-accent: #0f1219;
-    --color-border: #2a3040;
+    --color-disabled-surface: #1f2533;
+    --color-disabled-text: #6f7a8b;
+    --color-inverse-surface: #222a3a;
+    --color-inverse-text-secondary: #9aa4b3;
+    --control-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12), 0 6px 18px -6px rgba(245, 158, 11, 0.35);
   }
 
   body {
     background-color: var(--color-background);
     color: var(--color-text-primary);
     font-family: var(--font-sans);
-    font-weight: 500; /* Quicksand 400 is too thin at 14px and below */
-    line-height: 1.625;
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    font-weight: 500; /* never Quicksand 400 at 14px or smaller */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -118,18 +206,14 @@
     position: fixed;
     inset: 0;
     pointer-events: none;
-    background: radial-gradient(
-      ellipse at 50% 0%,
-      rgba(245, 158, 11, 0.03) 0%,
-      transparent 70%
-    );
+    background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 70%);
     z-index: -1;
   }
 
   a {
     color: var(--color-accent);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color var(--transition-duration-fast) var(--ease-standard);
   }
 
   a:hover {
@@ -141,15 +225,277 @@
     color: var(--color-text-primary);
   }
 
+  /* 2px accent outline, 2px offset, keyboard only. Rounded utilities on an
+     element (buttons, tiles) win over the 6px default used for text links. */
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 2px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
   }
 }
 
-/* Respect prefers-reduced-motion */
+/* =========================================================================
+ * Component styles that need selectors utilities can't express cleanly.
+ * Names match the components that use them.
+ * ======================================================================= */
+
+/* SkipLink: parked above the viewport (not display: none) until focused */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 16px;
+  z-index: 100;
+  transform: translateY(calc(-100% - 24px));
+}
+
+.skip-link:focus-visible,
+.skip-link:focus {
+  transform: none;
+}
+
+/* Header: shadow-header once the page has scrolled past 8px */
+.header {
+  transition: box-shadow var(--transition-duration-base) var(--ease-standard);
+}
+
+.header.is-scrolled {
+  box-shadow: var(--shadow-header);
+}
+
+.header.is-menu-open {
+  box-shadow: var(--shadow-raised);
+}
+
+/* MobileMenu: under 640px the shared nav collapses into a panel that opens
+   with a grid-row transition. From 640px up it sits inline in the header. */
+@media (max-width: 639.98px) {
+  .mobile-menu {
+    display: grid;
+    grid-template-rows: 0fr;
+    visibility: hidden;
+    transition:
+      grid-template-rows var(--transition-duration-base) var(--ease-standard),
+      visibility 0s linear var(--transition-duration-base);
+  }
+
+  .mobile-menu.is-open {
+    grid-template-rows: 1fr;
+    visibility: visible;
+    transition:
+      grid-template-rows var(--transition-duration-base) var(--ease-standard),
+      visibility 0s;
+  }
+
+  .mobile-menu > * {
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+/* Collapsible: grid-row open/close for "Show more" */
+.collapsible {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows var(--transition-duration-base) var(--ease-standard);
+}
+
+.collapsible.is-open {
+  grid-template-rows: 1fr;
+}
+
+.collapsible > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* TextLink arrow nudge: 3px in the arrow's direction */
+.text-link-arrow {
+  display: inline-block;
+  transition: transform var(--transition-duration-fast) var(--ease-standard);
+}
+
+.text-link:hover .text-link-arrow {
+  transform: translateX(3px);
+}
+
+.text-link:hover .text-link-arrow.is-back {
+  transform: translateX(-3px);
+}
+
+/* ExperienceEntry rail. The ol carries --rail-fill (0 to 1, i.e. 0–100%),
+   set from scroll position by ExperienceTimeline. */
+.experience-timeline {
+  --rail-x: 0.5rem; /* centre of the 16px rail column */
+  --rail-fill: 0;
+  position: relative;
+}
+
+@media (min-width: 640px) {
+  .experience-timeline {
+    --rail-x: calc(6.5rem + 1rem + 0.75rem); /* dates + gap + half rail */
+  }
+}
+
+.experience-rail,
+.experience-rail-fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: var(--rail-x);
+  width: 2px;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+}
+
+.experience-rail-fill {
+  transform: translateX(-50%) scaleY(var(--rail-fill));
+  transform-origin: top;
+}
+
+/* Experience entry node: outlined until the rail reaches it */
+.experience-node {
+  transition: background-color var(--transition-duration-base) var(--ease-standard);
+}
+
+.experience-entry.is-reached .experience-node {
+  background-color: var(--color-accent-decor);
+}
+
+/* =========================================================================
+ * Motion. Fade and move only (opacity and transform), plus grid-row height
+ * for panels that open. Entrances play once and nothing loops, except the
+ * optional "Currently" dot. All movement lives inside no-preference, so
+ * reduced motion gets static, fully visible content.
+ * ======================================================================= */
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ring-draw {
+  from {
+    stroke-dashoffset: 547;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes currently-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(0.85);
+  }
+}
+
+/* Portrait ring: r 87 in a 176 viewBox, 8px outside the 160px photo.
+   Rotated -90deg so the stroke starts at the top. */
+.hero-ring {
+  position: absolute;
+  inset: -5%; /* 176 / 160 = 110% */
+  width: 110%;
+  height: 110%;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.hero-ring circle {
+  stroke-dasharray: 547;
+  stroke-dashoffset: 0; /* fully drawn if the animation never runs */
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Hero entrance: 500ms each, staggered by 120ms via --enter-delay */
+  .hero-enter {
+    animation: rise-in 500ms var(--ease-standard) both;
+    animation-delay: var(--enter-delay, 0ms);
+  }
+
+  .hero-ring circle {
+    animation: ring-draw 700ms var(--ease-standard) 120ms both;
+  }
+
+  /* Section reveal: the JS adds .reveal only to sections that start below
+     the fold, so content is visible if the script never runs. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  .reveal.is-revealed {
+    animation: rise-in var(--transition-duration-slow) var(--ease-standard) both;
+  }
+
+  /* Button press and post card lift */
+  .press:active:not([aria-disabled="true"]):not(:disabled) {
+    transform: scale(0.98);
+  }
+
+  .lift {
+    transition:
+      transform var(--transition-duration-fast) var(--ease-standard),
+      box-shadow var(--transition-duration-fast) var(--ease-standard),
+      border-color var(--transition-duration-fast) var(--ease-standard);
+  }
+
+  .group:hover .lift,
+  .group:focus-visible .lift {
+    transform: translateY(-2px);
+  }
+
+  /* Optional "Currently" dot: the only infinite animation. */
+  .currently-dot.is-pulsing {
+    animation: currently-pulse 2.4s ease-in-out infinite;
+  }
+
+}
+
+/* Theme switch: 250ms crossfade where View Transitions are supported. Opacity
+   only, so it is kept under reduced motion. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--transition-duration-base);
+  animation-timing-function: var(--ease-standard);
+}
+
+/* Post card shadow lift applies with or without motion (no movement) */
+.group:hover .lift,
+.group:focus-visible .lift {
+  box-shadow: var(--shadow-raised);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  /* Draw the Experience rail in full and fill every node */
+  .experience-timeline {
+    --rail-fill: 1 !important;
+  }
+
+  .experience-entry .experience-node {
+    background-color: var(--color-accent-decor);
+  }
+
+  /* Catch-all: no transitions that move things */
   *,
   *::before,
   *::after {

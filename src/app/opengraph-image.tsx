@@ -2,6 +2,7 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
 import { siteConfig } from "@/lib/constants";
+import { lightColours } from "@/lib/tokens";
 
 export const dynamic = "force-static";
 export const alt = `${siteConfig.name} — Head of Engineering at Cuvva`;
@@ -9,14 +10,8 @@ export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 // Share image colours are fixed (light theme) because the PNG is rendered once
-// at build time. Values match the light-theme tokens in globals.css.
-const colours = {
-  background: "#fafafa",
-  textPrimary: "#37474f",
-  textSecondary: "#55646d",
-  accent: "#b45309",
-  accentDecor: "#d97706",
-};
+// at build time.
+const colours = lightColours;
 
 export default async function OpengraphImage() {
   const root = process.cwd();

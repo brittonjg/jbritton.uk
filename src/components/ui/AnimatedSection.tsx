@@ -5,37 +5,37 @@ import { useEffect, useRef } from "react";
 interface AnimatedSectionProps {
   children: React.ReactNode;
   className?: string;
-  delay?: number;
 }
 
-export default function AnimatedSection({
-  children,
-  className,
-  delay = 0,
-}: AnimatedSectionProps) {
+/*
+ * Section reveal: fades in and rises 8px (duration-slow, ease-standard) the
+ * first time the section scrolls into view, then never again.
+ *
+ * The hidden starting state is added here, only for sections that start
+ * below the fold, so content stays visible if this script never runs. Under
+ * reduced motion nothing is hidden or animated (see .reveal in globals.css).
+ */
+export default function AnimatedSection({ children, className }: AnimatedSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !("IntersectionObserver" in window)) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-    // If the element is already in or near the viewport, skip animation
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight + 50) {
-      return;
-    }
+    // Already on screen at load: leave it alone rather than flash it.
+    if (el.getBoundingClientRect().top < window.innerHeight) return;
 
-    // Element is below the fold — set up scroll-triggered animation
-    el.classList.add("animate-on-scroll");
+    el.classList.add("reveal");
 
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          el.classList.add("is-visible");
-          observer.unobserve(el);
+          el.classList.add("is-revealed");
+          observer.disconnect();
         }
       },
-      { rootMargin: "-50px" },
+      { rootMargin: "0px 0px -10% 0px" },
     );
 
     observer.observe(el);
@@ -43,11 +43,7 @@ export default function AnimatedSection({
   }, []);
 
   return (
-    <div
-      ref={ref}
-      className={className}
-      style={delay ? { animationDelay: `${delay}s` } : undefined}
-    >
+    <div ref={ref} className={className}>
       {children}
     </div>
   );
