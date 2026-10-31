@@ -34,9 +34,6 @@ export default async function Home() {
         <div className="size-1.5 rounded-full bg-accent-decor" />
         <div className="h-px w-12 bg-border" />
       </div>
-      {/* TODO(james): optional section titles (heading-section style) under the
-          "Currently" and "Career at a glance" eyebrows. Pass `title` to
-          SectionHeader once you have the words. */}
       {currentRole && (
         <AnimatedSection>
           <Currently role={currentRole} />

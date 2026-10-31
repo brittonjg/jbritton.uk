@@ -52,8 +52,8 @@ export default function Hero() {
         </a>
       </p>
       <p className="hero-enter mt-3 max-w-lg text-body-large text-text-secondary" style={enter(3)}>
-        I run engineering at Cuvva. These days that&rsquo;s mostly people, plans and
-        keeping things moving, but I&rsquo;m still hands-on with the code.
+        These days that&rsquo;s mostly people, plans and keeping things moving, but
+        I&rsquo;m still hands-on with the code.
       </p>
       <div
         className="hero-enter mt-8 flex flex-wrap items-center justify-center gap-3"
