@@ -15,7 +15,7 @@ export default async function BlogPage() {
   return (
     <Container>
       <section className="py-16">
-        <h1 className="font-display text-3xl text-text-primary">Writing</h1>
+        <h1 className="font-display text-heading-2 text-text-primary sm:text-heading-1">Writing</h1>
         <div className="mt-8">
           <PostList posts={posts} />
         </div>

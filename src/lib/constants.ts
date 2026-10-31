@@ -30,6 +30,8 @@ export const socialLinks = [
     name: "Last.fm",
     url: "https://www.last.fm/user/mcdillon",
     icon: "lastfm",
+    /** Shown as a footer text link only, not in the icon row. */
+    footerOnly: true,
   },
 ] as const;
 

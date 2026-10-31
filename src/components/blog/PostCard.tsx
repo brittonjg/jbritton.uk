@@ -3,32 +3,42 @@ import type { BlogPost } from "@/types/blog";
 import { formatDate } from "@/lib/blog";
 import Tag from "@/components/ui/Tag";
 
-export default function PostCard({ post }: { post: BlogPost }) {
+interface PostCardProps {
+  post: BlogPost;
+  headingLevel?: "h2" | "h3";
+}
+
+/*
+ * Blog post preview. The only card that lifts: translateY(-2px) and
+ * shadow-raised on hover or keyboard focus, over duration-fast (.lift).
+ */
+export default function PostCard({ post, headingLevel: Heading = "h2" }: PostCardProps) {
   const card = (
-    <article className="rounded-md border border-border bg-surface p-6 shadow-card transition-all duration-200 group-hover:-translate-y-0.5 group-hover:border-accent/30 group-hover:shadow-lg">
+    <article className="lift rounded-lg border border-border bg-surface p-6 shadow-card group-hover:border-accent-decor">
       <div className="flex items-start justify-between gap-3">
-        <h2 className="text-h3 text-text-primary transition-colors group-hover:text-accent">
+        <Heading className="font-display text-title-post text-text-primary transition-colors duration-fast group-hover:text-accent">
           {post.title}
-        </h2>
+        </Heading>
         {post.source === "substack" && (
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-accent-decor/20 bg-accent-subtle px-2.5 py-0.5 text-xs font-semibold text-accent-hover">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent-subtle px-3 py-1 text-tag text-on-accent-subtle">
             Substack
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
               fill="currentColor"
-              className="h-3 w-3"
+              aria-hidden="true"
+              className="size-3"
             >
               <path d="M4.5 3.25a.75.75 0 0 0 0 1.5h4.69L3.22 10.72a.75.75 0 1 0 1.06 1.06l5.97-5.97v4.69a.75.75 0 0 0 1.5 0v-6.5a.75.75 0 0 0-.75-.75h-6.5Z" />
             </svg>
           </span>
         )}
       </div>
-      <div className="mt-2 flex items-center gap-2 text-sm text-text-tertiary">
+      <div className="mt-2 flex items-center gap-2 text-meta text-text-tertiary">
         <time dateTime={post.date}>{formatDate(post.date)}</time>
         {post.source === "local" && (
           <>
-            <span>&middot;</span>
+            <span aria-hidden="true">&middot;</span>
             <span>{post.readingTime} min read</span>
           </>
         )}
@@ -44,21 +54,18 @@ export default function PostCard({ post }: { post: BlogPost }) {
     </article>
   );
 
+  const linkClasses = "group block rounded-lg";
+
   if (post.source === "substack") {
     return (
-      <a
-        href={post.link}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group block"
-      >
+      <a href={post.link} target="_blank" rel="noopener noreferrer" className={linkClasses}>
         {card}
       </a>
     );
   }
 
   return (
-    <Link href={`/blog/${post.slug}`} className="group block">
+    <Link href={`/blog/${post.slug}`} className={linkClasses}>
       {card}
     </Link>
   );

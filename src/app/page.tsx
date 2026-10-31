@@ -31,7 +31,7 @@ export default async function Home() {
       <Hero />
       <div aria-hidden="true" className="flex items-center justify-center gap-3 pb-12">
         <div className="h-px w-12 bg-border" />
-        <div className="h-1.5 w-1.5 rounded-full bg-accent-decor/60" />
+        <div className="size-1.5 rounded-full bg-accent-decor" />
         <div className="h-px w-12 bg-border" />
       </div>
       {currentRole && (
@@ -42,11 +42,7 @@ export default async function Home() {
       <AnimatedSection>
         <CareerGlance roles={roles} education={education} />
       </AnimatedSection>
-      {posts.length > 0 && (
-        <AnimatedSection>
-          <LatestPosts posts={posts} />
-        </AnimatedSection>
-      )}
+      {posts.length > 0 && <LatestPosts posts={posts} />}
       <AnimatedSection>
         <ContactBand />
       </AnimatedSection>
