@@ -51,9 +51,11 @@ export default function Hero() {
           Cuvva
         </a>
       </p>
-      <p className="hero-enter mt-3 max-w-lg text-body-large text-text-secondary" style={enter(3)}>
-        These days that&rsquo;s mostly people, plans and keeping things moving, but
-        I&rsquo;m still hands-on with the code.
+      <p className="hero-enter mt-3 max-w-lg text-body-large text-balance text-text-secondary" style={enter(3)}>
+        These days that&rsquo;s mostly aligning the leadership team, growing people,
+        improving how we deliver and keeping us honest on our goals. I&rsquo;m still{" "}
+        <span className="whitespace-nowrap">hands-on</span> technically, from planning
+        through to code.
       </p>
       <div
         className="hero-enter mt-8 flex flex-wrap items-center justify-center gap-3"

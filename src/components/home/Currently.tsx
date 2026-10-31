@@ -3,9 +3,8 @@ import RoleCard from "@/components/experience/RoleCard";
 import SectionHeader from "@/components/ui/SectionHeader";
 
 /*
- * TODO(james): the dot can pulse gently (opacity and scale, every 2.4s, off
- * under reduced motion). It is the site's only looping animation, so it ships
- * switched off. Set this to true if you'd like it.
+ * The dot can pulse gently (opacity and scale, every 2.4s, off under reduced
+ * motion). Left off by choice so the site has no looping animation.
  */
 const PULSE_CURRENTLY_DOT = false;
 
