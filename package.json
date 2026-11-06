@@ -28,14 +28,14 @@
     "@types/react-dom": "^19.3.0",
     "eslint": "^9.39.4",
     "eslint-config-next": "^16.0.0",
-    "postcss": "^8.5.12",
+    "postcss": "^8.5.32",
     "rehype-pretty-code": "^0.14.0",
     "remark-gfm": "^4.0.0",
-    "sharp": "^0.34.0",
+    "sharp": "^0.35.5",
     "shiki": "^4.0.0",
     "tailwindcss": "^4.2.4",
     "to-ico": "^1.1.5",
     "typescript": "^6.0.0",
-    "vitest": "^4.1.5"
+    "vitest": "^4.1.12"
   }
 }
