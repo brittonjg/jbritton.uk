@@ -82,7 +82,7 @@ describe("getAllPosts", () => {
           published: false,
         },
         content: "draft content",
-      } as ReturnType<typeof matter.default>)
+      } as unknown as ReturnType<typeof matter.default>)
       .mockReturnValueOnce({
         data: {
           title: "Published Post",
@@ -92,7 +92,7 @@ describe("getAllPosts", () => {
           published: true,
         },
         content: "published content",
-      } as ReturnType<typeof matter.default>);
+      } as unknown as ReturnType<typeof matter.default>);
 
     const posts = getAllPosts();
     expect(posts).toHaveLength(1);
@@ -118,7 +118,7 @@ describe("getAllPosts", () => {
           published: true,
         },
         content: "old content",
-      } as ReturnType<typeof matter.default>)
+      } as unknown as ReturnType<typeof matter.default>)
       .mockReturnValueOnce({
         data: {
           title: "New Post",
@@ -128,7 +128,7 @@ describe("getAllPosts", () => {
           published: true,
         },
         content: "new content",
-      } as ReturnType<typeof matter.default>);
+      } as unknown as ReturnType<typeof matter.default>);
 
     const posts = getAllPosts();
     expect(posts[0].frontmatter.title).toBe("New Post");
@@ -160,7 +160,7 @@ describe("getAllBlogPosts", () => {
         published: true,
       },
       content: "local content",
-    } as ReturnType<typeof matter.default>);
+    } as unknown as ReturnType<typeof matter.default>);
     vi.mocked(getSubstackPosts).mockResolvedValue([]);
 
     const posts = await getAllBlogPosts();
@@ -208,7 +208,7 @@ describe("getAllBlogPosts", () => {
         published: true,
       },
       content: "local content",
-    } as ReturnType<typeof matter.default>);
+    } as unknown as ReturnType<typeof matter.default>);
     vi.mocked(getSubstackPosts).mockResolvedValue([
       {
         title: "Newer Substack Post",
