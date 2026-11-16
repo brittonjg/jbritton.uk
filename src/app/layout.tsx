@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
-import { DM_Serif_Display } from "next/font/google";
+import { DM_Serif_Display, Quicksand } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import { siteConfig } from "@/lib/constants";
 import { baseOpenGraph } from "@/lib/metadata";
@@ -9,34 +8,11 @@ import Footer from "@/components/layout/Footer";
 import SkipLink from "@/components/ui/SkipLink";
 import "@/styles/globals.css";
 
-const quicksand = localFont({
-  src: [
-    {
-      path: "../../public/fonts/quicksand/Quicksand-Light.ttf",
-      weight: "300",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/quicksand/Quicksand-Regular.ttf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/quicksand/Quicksand-Medium.ttf",
-      weight: "500",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/quicksand/Quicksand-SemiBold.ttf",
-      weight: "600",
-      style: "normal",
-    },
-    {
-      path: "../../public/fonts/quicksand/Quicksand-Bold.ttf",
-      weight: "700",
-      style: "normal",
-    },
-  ],
+// Quicksand is a variable font: one Latin WOFF2 covers every weight (300–700).
+// next/font downloads it at build time, self-hosts it and generates a
+// size-adjusted "Quicksand Fallback" face, so text doesn't shift on swap.
+const quicksand = Quicksand({
+  subsets: ["latin"],
   variable: "--font-quicksand",
   display: "swap",
 });
@@ -44,7 +20,7 @@ const quicksand = localFont({
 const dmSerif = DM_Serif_Display({
   weight: "400",
   subsets: ["latin"],
-  variable: "--font-display",
+  variable: "--font-dm-serif",
   display: "swap",
 });
 

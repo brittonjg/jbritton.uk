@@ -108,7 +108,7 @@ Managed by `next-themes` with class strategy. The `.dark` class on `<html>` over
 
 ### Typography
 
-- Font: **Quicksand** (self-hosted via `next/font/local`, 5 weights: 300–700)
+- Fonts: **Quicksand** (variable, 300–700) and **DM Serif Display**, both via `next/font/google`, which downloads and self-hosts them at build time. Each sets a variable on `<html>` (`--font-quicksand`, `--font-dm-serif`) that `--font-sans` / `--font-display` in `globals.css` read, so the size-adjusted fallback face is part of the stack
 - Blog prose uses `@tailwindcss/typography` with `prose prose-neutral dark:prose-invert`
 - Prose links styled with `prose-a:text-accent prose-a:no-underline hover:prose-a:text-accent-hover`
 
@@ -185,10 +185,11 @@ Reading time is calculated automatically (200 words/minute) — do not set it in
 1. **Static sitemap**: `src/app/sitemap.ts` must export `const dynamic = "force-static"` or the build fails with static export
 2. **Async params**: Next.js 15 blog route uses `params: Promise<{ slug: string }>` — must `await params` before accessing `.slug`
 3. **Post type cast**: In `blog.ts`, the `.filter()` result uses `as Post[]` because `readingTime` is optional in `Frontmatter` but always set during mapping
-4. **Font loading**: Quicksand is loaded via `next/font/local` with explicit paths to 5 `.ttf` files in `public/fonts/quicksand/`
+4. **Font files**: the site loads its fonts through `next/font/google`. The two `.ttf` files in `public/fonts/` are only for the share image (`opengraph-image.tsx` needs TTF); don't delete them
 5. **Output tracing**: `outputFileTracingRoot: __dirname` in `next.config.ts` silences a workspace root warning
 6. **Share image**: `src/app/opengraph-image.tsx` renders the 1200×630 PNG at build time. Next.js writes it without a file extension, so `public/_headers` sets its `Content-Type` for Cloudflare
 7. **Substack RSS**: `src/lib/rss.ts` is a stub — `rss-parser` is installed but the integration is commented out. Set `SUBSTACK_URL` and uncomment to activate.
+8. **Portrait**: the hero uses the pre-sized AVIF, WebP and JPEG files in `public/images/portrait/`, made from `public/images/selfie.jpg` by `npm run generate-portrait`. Re-run it after replacing the photo. `selfie.jpg` stays: it is the source, and the share image embeds it
 
 ## Do Not
 

@@ -1,7 +1,16 @@
-import Image from "next/image";
 import { cvPdfPath, siteConfig } from "@/lib/constants";
 import SocialLinks from "@/components/ui/SocialLinks";
 import Button from "@/components/ui/Button";
+
+/** Portrait files from scripts/generate-portrait.mjs (1x, 2x and 3x widths). */
+const portraitWidths = [160, 320, 480];
+const portraitSizes = "(width >= 40rem) 160px, 144px";
+
+function portraitSrcSet(format: "avif" | "webp" | "jpg") {
+  return portraitWidths
+    .map((w) => `/images/portrait/selfie-${w}.${format} ${w}w`)
+    .join(", ");
+}
 
 /** Hero entrance: each step fades in and rises 8px, staggered by 120ms. */
 function enter(step: number) {
@@ -13,14 +22,23 @@ export default function Hero() {
     <section className="flex flex-col items-center justify-center py-16 text-center sm:py-24">
       <div className="hero-enter relative size-36 sm:size-40" style={enter(0)}>
         <div className="size-full overflow-hidden rounded-full shadow-avatar">
-          <Image
-            src="/images/selfie.jpg"
-            alt="Portrait of James Britton"
-            width={160}
-            height={160}
-            className="size-full object-cover"
-            priority
-          />
+          {/* The portrait is the largest image above the fold, so it loads first
+              (fetchPriority) and is never lazy. Browsers without AVIF or WebP
+              fall back to the JPEG. */}
+          <picture className="block size-full">
+            <source type="image/avif" srcSet={portraitSrcSet("avif")} sizes={portraitSizes} />
+            <source type="image/webp" srcSet={portraitSrcSet("webp")} sizes={portraitSizes} />
+            <img
+              src="/images/portrait/selfie-160.jpg"
+              srcSet={portraitSrcSet("jpg")}
+              sizes={portraitSizes}
+              alt="Portrait of James Britton"
+              width={160}
+              height={160}
+              fetchPriority="high"
+              className="size-full object-cover"
+            />
+          </picture>
         </div>
         {/* Ring draws in from the top: r 87 in a 176 viewBox, 8px outside the photo */}
         <svg viewBox="0 0 176 176" aria-hidden="true" className="hero-ring">
