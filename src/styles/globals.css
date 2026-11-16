@@ -1,7 +1,15 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* Dark only applies on screen: printing from the dark theme gives the light
+   palette (dark text on white paper), including prose-invert on posts. */
+@custom-variant dark {
+  @media not print {
+    &:where(.dark, .dark *) {
+      @slot;
+    }
+  }
+}
 
 /*
  * Design system v2 tokens. This file is the only place raw colour values
@@ -168,27 +176,30 @@
     --control-shadow: 0 0 transparent; /* shadow-control is "none" in light */
   }
 
-  .dark {
-    color-scheme: dark;
-    --color-background: #0f1219;
-    --color-surface: #171c28;
-    --color-border: #2a3040;
-    --color-border-strong: #627086;
-    --color-border-control: rgba(245, 158, 11, 0.6); /* soft amber outline */
-    --color-text-primary: #e8eaed;
-    --color-text-secondary: #8b95a5;
-    --color-text-tertiary: #808b9b;
-    --color-accent: #f59e0b;
-    --color-accent-hover: #fbbf24;
-    --color-accent-decor: #d97706;
-    --color-accent-subtle: #2a2113;
-    --color-on-accent-subtle: #fbbf24;
-    --color-on-accent: #0f1219;
-    --color-disabled-surface: #1f2533;
-    --color-disabled-text: #6f7a8b;
-    --color-inverse-surface: #222a3a;
-    --color-inverse-text-secondary: #9aa4b3;
-    --control-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12), 0 6px 18px -6px rgba(245, 158, 11, 0.35);
+  /* Screen only, so print always uses the light tokens (see @media print). */
+  @media not print {
+    .dark {
+      color-scheme: dark;
+      --color-background: #0f1219;
+      --color-surface: #171c28;
+      --color-border: #2a3040;
+      --color-border-strong: #627086;
+      --color-border-control: rgba(245, 158, 11, 0.6); /* soft amber outline */
+      --color-text-primary: #e8eaed;
+      --color-text-secondary: #8b95a5;
+      --color-text-tertiary: #808b9b;
+      --color-accent: #f59e0b;
+      --color-accent-hover: #fbbf24;
+      --color-accent-decor: #d97706;
+      --color-accent-subtle: #2a2113;
+      --color-on-accent-subtle: #fbbf24;
+      --color-on-accent: #0f1219;
+      --color-disabled-surface: #1f2533;
+      --color-disabled-text: #6f7a8b;
+      --color-inverse-surface: #222a3a;
+      --color-inverse-text-secondary: #9aa4b3;
+      --control-shadow: 0 0 0 3px rgba(245, 158, 11, 0.12), 0 6px 18px -6px rgba(245, 158, 11, 0.35);
+    }
   }
 
   body {
@@ -202,14 +213,16 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Subtle amber glow in dark mode for atmospheric depth */
-  .dark body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 70%);
-    z-index: -1;
+  /* Subtle amber glow in dark mode for atmospheric depth (screen only) */
+  @media not print {
+    .dark body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.03) 0%, transparent 70%);
+      z-index: -1;
+    }
   }
 
   a {
@@ -268,29 +281,32 @@
   box-shadow: var(--shadow-raised);
 }
 
-/* MobileMenu: under 640px the shared nav collapses into a panel that opens
-   with a grid-row transition. From 640px up it sits inline in the header. */
-@media (max-width: 639.98px) {
-  .mobile-menu {
+/* MobileMenu: below the sm breakpoint (40rem, 640px at the default text
+   size) the shared nav collapses into a panel that opens with a grid-row
+   transition. From sm up it sits inline in the header. The breakpoint comes
+   from Tailwind's --breakpoint-sm, so it moves with the visitor's text size
+   exactly as the sm: utilities in the markup do. */
+.mobile-menu {
+  @variant max-sm {
     display: grid;
     grid-template-rows: 0fr;
     visibility: hidden;
     transition:
       grid-template-rows var(--transition-duration-base) var(--ease-standard),
       visibility 0s linear var(--transition-duration-base);
-  }
 
-  .mobile-menu.is-open {
-    grid-template-rows: 1fr;
-    visibility: visible;
-    transition:
-      grid-template-rows var(--transition-duration-base) var(--ease-standard),
-      visibility 0s;
-  }
+    &.is-open {
+      grid-template-rows: 1fr;
+      visibility: visible;
+      transition:
+        grid-template-rows var(--transition-duration-base) var(--ease-standard),
+        visibility 0s;
+    }
 
-  .mobile-menu > * {
-    min-height: 0;
-    overflow: hidden;
+    & > * {
+      min-height: 0;
+      overflow: hidden;
+    }
   }
 }
 
@@ -332,8 +348,8 @@
   position: relative;
 }
 
-@media (min-width: 640px) {
-  .experience-timeline {
+.experience-timeline {
+  @variant sm {
     --rail-x: calc(6.5rem + 1rem + 0.75rem); /* dates + gap + half rail */
   }
 }
@@ -461,8 +477,9 @@
       border-color var(--transition-duration-fast) var(--ease-standard);
   }
 
-  .group:hover .lift,
-  .group:focus-visible .lift {
+  /* PostCard: the card is the .lift; its stretched title link takes focus */
+  .lift:hover,
+  .lift:has(a:focus-visible) {
     transform: translateY(-2px);
   }
 
@@ -482,8 +499,8 @@
 }
 
 /* Post card shadow lift applies with or without motion (no movement) */
-.group:hover .lift,
-.group:focus-visible .lift {
+.lift:hover,
+.lift:has(a:focus-visible) {
   box-shadow: var(--shadow-raised);
 }
 
@@ -497,6 +514,13 @@
     background-color: var(--color-accent-decor);
   }
 
+  @media (forced-colors: active) {
+    .experience-entry .experience-node {
+      border-color: Highlight;
+      background: Highlight;
+    }
+  }
+
   /* Catch-all: no transitions that move things */
   *,
   *::before,
@@ -508,8 +532,61 @@
   }
 }
 
-/* Print styles for CV page */
+/* Windows High Contrast and other forced-colour modes drop backgrounds and
+   shadows, which would hide the active nav underline, the Experience rail and
+   the filled nodes. Draw them with system colours instead. Focus rings are
+   outlines, so they already survive. */
+@media (forced-colors: active) {
+  /* Decorative dots (highlight bullets, "Currently", empty state) */
+  .bg-accent-decor {
+    background: CanvasText;
+    forced-color-adjust: none;
+  }
+
+  .header nav a > span::after {
+    background: LinkText;
+    forced-color-adjust: none;
+  }
+
+  .header nav a[aria-current] > span::after {
+    background: Highlight;
+  }
+
+  .experience-rail {
+    background: GrayText;
+    forced-color-adjust: none;
+  }
+
+  .experience-rail-fill {
+    background: Highlight;
+    forced-color-adjust: none;
+  }
+
+  .experience-node {
+    border-color: CanvasText;
+    background: Canvas;
+    forced-color-adjust: none;
+  }
+
+  .experience-entry.is-reached .experience-node {
+    border-color: Highlight;
+    background: Highlight;
+  }
+
+  /* Filled buttons lose their fill: an edge keeps them looking like buttons */
+  .press {
+    border: 1px solid ButtonText;
+  }
+}
+
+/* Print styles for CV page. The dark tokens are screen only, so print gets
+   the light palette in either theme. next-themes sets an inline
+   color-scheme on <html>, which !important overrides. */
 @media print {
+  :root {
+    color-scheme: light !important;
+  }
+
   header,
   footer,
   .no-print {

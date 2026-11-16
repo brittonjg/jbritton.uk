@@ -10,9 +10,9 @@ interface ExperienceEntryProps {
 
 /*
  * One role on the Experience timeline.
- * From 640px: a 104px right-aligned dates column, a 24px rail column with a
+ * From sm (40rem): a 104px right-aligned dates column, a 24px rail column with a
  * 12px node, then the role card.
- * Under 640px: a 16px rail column on the left, dates above the card.
+ * Below sm: a 16px rail column on the left, dates above the card.
  */
 export default function ExperienceEntry({ role, isCurrent = false }: ExperienceEntryProps) {
   return (

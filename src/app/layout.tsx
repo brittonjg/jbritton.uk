@@ -40,6 +40,11 @@ export const metadata: Metadata = {
     title: siteConfig.name,
     description: siteConfig.description,
   },
+  // Lets browsers that support it scale the page with the OS text size.
+  // Breakpoints are in rem so the layout follows. Never set a root font-size.
+  other: {
+    "text-scale": "scale",
+  },
 };
 
 export default function RootLayout({

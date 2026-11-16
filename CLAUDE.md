@@ -52,7 +52,7 @@ There is **no `tailwind.config.js` or `tailwind.config.ts`**. Tailwind v4 is con
 
 - `src/styles/globals.css` uses `@theme { }` to define design tokens
 - `@plugin "@tailwindcss/typography"` enables prose styling
-- `@custom-variant dark (&:where(.dark, .dark *))` enables dark mode
+- `@custom-variant dark` (`.dark` and its descendants, screen only) enables dark mode
 
 ### Colour Tokens
 
@@ -104,7 +104,7 @@ Quicksand styles carry their own weight: `text-heading-3` (20/28, 700), `text-ti
 
 ### Dark Mode
 
-Managed by `next-themes` with class strategy. The `.dark` class on `<html>` overrides CSS variables. System preference detection is enabled. No manual dark: prefixes needed — the CSS variable approach handles it.
+Managed by `next-themes` with class strategy. The `.dark` class on `<html>` overrides CSS variables, on screen only: print always uses the light tokens. System preference detection is enabled. No manual dark: prefixes needed — the CSS variable approach handles it.
 
 ### Typography
 
@@ -114,7 +114,15 @@ Managed by `next-themes` with class strategy. The `.dark` class on `<html>` over
 
 ### Print Styles
 
-`@media print` rules in `globals.css` hide the header, footer, and `.no-print` elements. Used for the CV page.
+`@media print` rules in `globals.css` hide the header, footer, and `.no-print` elements, and force `color-scheme: light`. The dark tokens and the `dark:` variant don't apply in print, so printing from the dark theme still gives dark text on white. Used for the CV page.
+
+### Forced Colours
+
+Windows High Contrast drops backgrounds and shadows. The `@media (forced-colors: active)` block in `globals.css` redraws what carries meaning with system colours: the nav underline (current page in `Highlight`), the Experience rail, fill and nodes, the `bg-accent-decor` dots, and an edge on `.press` buttons. Anything new that shows state with a background or shadow needs a rule there too.
+
+### Breakpoints
+
+Width breakpoints are in rem, from Tailwind's `--breakpoint-sm` (40rem). In hand-written CSS use `@variant sm { … }` / `@variant max-sm { … }`; in scripts use `matchMedia("(width >= 40rem)")`. Never a pixel width, so the layout follows the visitor's text size (the `text-scale` meta in `layout.tsx` opts in to the OS setting). Never set a root `font-size`.
 
 ## Component Conventions
 
@@ -130,7 +138,7 @@ Managed by `next-themes` with class strategy. The `.dark` class on `<html>` over
 
 - `Container` — max-width content wrapper, used on every page
 - `SkipLink` — first focusable element, jumps to `<main id="main-content">`
-- `Header` + `MobileMenu` — one copy of the nav; under 640px it collapses into a grid-row panel. `is-scrolled` adds `shadow-header` past 8px
+- `Header` + `MobileMenu` — one copy of the nav; below the `sm` breakpoint (40rem) it collapses into a grid-row panel. `is-scrolled` adds `shadow-header` past 8px
 - `Footer` — © year, then text links to every social profile
 - `Button` — primary / secondary, `tone="inverse"` for the contact band, with `disabled` and `loading` states (`ui/Button.tsx`)
 - `TextLink` — accent "→" link with the arrow nudge
@@ -142,7 +150,7 @@ Managed by `next-themes` with class strategy. The `.dark` class on `<html>` over
 - `Hero`, `TimelineRow`, `ContactBand` — homepage pieces
 - `RoleCard` — role card (not a link, never lifts) used by the Experience page and the homepage "Currently" section
 - `ExperienceTimeline` + `ExperienceEntry` — Experience page rail that draws with scroll (`--rail-fill`)
-- `PostCard` — blog post preview; the only card that lifts on hover
+- `PostCard` — blog post preview; the only card that lifts on hover. Only the title is a link, its `::after` stretched over the card (so screen readers hear just the title)
 
 ## Content System
 
