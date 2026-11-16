@@ -4,7 +4,9 @@
 
 Personal website and blog for James Britton, Head of Engineering at Cuvva. Live at https://jbritton.uk.
 
-Built with Next.js 15 (App Router), TypeScript, Tailwind CSS v4, and MDX. **Fully static** — no server, no database, no CMS. Deployed to Cloudflare Pages.
+Built with Next.js 16 (App Router), TypeScript, Tailwind CSS v4, and MDX. **Fully static** — no server, no database, no CMS. Deployed to Cloudflare Workers as static assets (`wrangler.toml` serves `out/`).
+
+**Browser support:** Baseline Widely available features can be used as they are. Anything newer (Baseline Newly available or Limited) only as progressive enhancement, with a fallback so the page still works without it. Check a feature's status before using it.
 
 ## Commands
 
@@ -12,9 +14,16 @@ Built with Next.js 15 (App Router), TypeScript, Tailwind CSS v4, and MDX. **Full
 npm run dev     # Dev server on localhost:3000
 npm run build   # Production build → out/ directory
 npm run lint    # ESLint
+npm test        # Vitest: src/lib/*.test.ts
 ```
 
-There are no tests. Verify changes by running `npm run build` and checking the output.
+Verify changes with `npm run lint`, `npm test` and `npm run build`, then check the output in `out/`. CI runs all three before every deploy and on every pull request (`.github/workflows/deploy.yml`).
+
+### Deployment
+
+- Pushes to `main` deploy through `.github/workflows/deploy.yml`: lint, test, build, then `wrangler deploy`. A failed check stops the deploy.
+- Cloudflare's Workers Builds integration also builds every branch and posts preview links on pull requests.
+- Headers (security, caching, share-image content types) live in `public/_headers`.
 
 ## Architecture
 
@@ -30,9 +39,9 @@ The site uses `output: "export"` in `next.config.ts`. This means:
 
 ### App Router
 
-- Pages are in `src/app/` using the Next.js 15 App Router convention
+- Pages are in `src/app/` using the App Router convention
 - NOT the Pages Router (`pages/` directory does not exist)
-- Dynamic route params in Next.js 15 are `Promise<{ slug: string }>` — must be awaited
+- Dynamic route params are `Promise<{ slug: string }>` — must be awaited
 
 ### Server vs Client Components
 
@@ -40,7 +49,6 @@ The site uses `output: "export"` in `next.config.ts`. This means:
 - **Add `"use client"` only when** the component uses:
   - React hooks (`useState`, `useEffect`, `usePathname`, etc.)
   - Browser APIs (`window`, `document`, `localStorage`)
-  - Framer Motion (`motion.*` components)
   - next-themes (`useTheme` hook)
 - Client components: `Header.tsx`, `AnimatedSection.tsx`, `ThemeToggle.tsx`, `experience/Duration.tsx`, `experience/HighlightList.tsx`, `experience/ExperienceTimeline.tsx`
 
@@ -183,12 +191,12 @@ Reading time is calculated automatically (200 words/minute) — do not set it in
 ## Known Quirks
 
 1. **Static sitemap**: `src/app/sitemap.ts` must export `const dynamic = "force-static"` or the build fails with static export
-2. **Async params**: Next.js 15 blog route uses `params: Promise<{ slug: string }>` — must `await params` before accessing `.slug`
+2. **Async params**: the blog route uses `params: Promise<{ slug: string }>` — must `await params` before accessing `.slug`
 3. **Post type cast**: In `blog.ts`, the `.filter()` result uses `as Post[]` because `readingTime` is optional in `Frontmatter` but always set during mapping
 4. **Font files**: the site loads its fonts through `next/font/google`. The two `.ttf` files in `public/fonts/` are only for the share image (`opengraph-image.tsx` needs TTF); don't delete them
 5. **Output tracing**: `outputFileTracingRoot: __dirname` in `next.config.ts` silences a workspace root warning
 6. **Share image**: `src/app/opengraph-image.tsx` renders the 1200×630 PNG at build time. Next.js writes it without a file extension, so `public/_headers` sets its `Content-Type` for Cloudflare
-7. **Substack RSS**: `src/lib/rss.ts` is a stub — `rss-parser` is installed but the integration is commented out. Set `SUBSTACK_URL` and uncomment to activate.
+7. **Substack RSS**: `src/lib/rss.ts` fetches the Substack feed at build time, and `getAllBlogPosts()` in `src/lib/blog.ts` merges those posts with the local MDX posts (Substack posts link out). If the fetch fails it returns no posts and the build carries on. New Substack posts appear only after the next build
 8. **Portrait**: the hero uses the pre-sized AVIF, WebP and JPEG files in `public/images/portrait/`, made from `public/images/selfie.jpg` by `npm run generate-portrait`. Re-run it after replacing the photo. `selfie.jpg` stays: it is the source, and the share image embeds it
 
 ## Do Not

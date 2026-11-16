@@ -1,3 +1,29 @@
+# Cloudflare reads this file at deploy (Workers static assets). Rules are
+# matched by path; a request gets the headers of every rule it matches.
+
+# Security headers for every response. The site takes no input and loads no
+# third-party scripts, so these cost nothing and close off framing, MIME
+# sniffing and referrer leaks.
+# - HSTS starts at 5 minutes. Once the site is confirmed fine over HTTPS only,
+#   raise it to `max-age=31536000; includeSubDomains`.
+# - The CSP covers framing and plugins only. A script-src policy is left out on
+#   purpose: the static export inlines scripts (React Server Components
+#   payloads, the next-themes script), so it would need trialling with
+#   Content-Security-Policy-Report-Only first.
+/*
+  Strict-Transport-Security: max-age=300
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), geolocation=(), microphone=()
+  X-Frame-Options: DENY
+  Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'none'; form-action 'self'
+  Cross-Origin-Opener-Policy: same-origin-allow-popups
+
+# Next.js puts a content hash in every file name under /_next/static/, so a
+# changed file always gets a new URL and these can be cached for a year.
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
 # Next.js writes the generated share images without a file extension, so tell
 # Cloudflare their content type explicitly.
 /opengraph-image

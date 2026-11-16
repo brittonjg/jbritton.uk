@@ -1,8 +1,11 @@
 name: Deploy to Cloudflare
 
+# Pull requests run the checks and the build only. Pushes to main also deploy,
+# and only if every check passes.
 on:
   push:
     branches: [main]
+  pull_request:
 
 jobs:
   deploy:
@@ -19,9 +22,12 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - run: npm run lint
+      - run: npm test
       - run: npm run build
 
-      - uses: cloudflare/wrangler-action@v3
+      - if: github.event_name == 'push'
+        uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

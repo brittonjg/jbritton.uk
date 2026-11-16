@@ -2,7 +2,7 @@
 
 Personal website and blog for [James Britton](https://jbritton.uk) — Head of Engineering at [Cuvva](https://www.cuvva.com).
 
-Built with Next.js 15, TypeScript, and Tailwind CSS v4. Statically exported and deployed to Cloudflare Pages.
+Built with Next.js 16, TypeScript, and Tailwind CSS v4. Statically exported and served as static assets on Cloudflare Workers.
 
 ---
 
@@ -10,19 +10,19 @@ Built with Next.js 15, TypeScript, and Tailwind CSS v4. Statically exported and 
 
 | Dependency | Version | Purpose |
 |---|---|---|
-| Next.js | 15 | App Router, static export, metadata API |
+| Next.js | 16 | App Router, static export, metadata API, `next/font` |
 | React | 19 | UI framework |
-| TypeScript | 5 | Type safety |
+| TypeScript | 6 | Type safety |
 | Tailwind CSS | 4 | Utility-first styling (CSS-based config, no `tailwind.config.js`) |
 | @tailwindcss/typography | 0.5 | Prose styling for blog content |
-| Framer Motion | 11 | Scroll-triggered animations, hero stagger |
 | next-themes | 0.4 | Dark / light mode with system preference |
-| next-mdx-remote | 5 | Server-side MDX rendering for blog posts |
+| next-mdx-remote | 6 | Server-side MDX rendering for blog posts |
 | gray-matter | 4 | YAML frontmatter parsing |
 | remark-gfm | 4 | GitHub Flavoured Markdown (tables, strikethrough, etc.) |
-| rehype-pretty-code | 0.14 | Syntax highlighting via Shiki |
-| shiki | 1 | Syntax highlighter engine |
-| rss-parser | 3.13 | Substack RSS integration (stubbed, not yet active) |
+| rss-parser | 3.13 | Pulls Substack posts into the blog at build time |
+| Vitest | 4 | Unit tests for `src/lib` |
+
+Animations are plain CSS (`src/styles/globals.css`); there is no animation library.
 
 ---
 
@@ -44,6 +44,9 @@ npm run build
 
 # Lint
 npm run lint
+
+# Tests
+npm test
 ```
 
 Node 20+ is recommended.
@@ -56,8 +59,9 @@ Node 20+ is recommended.
 src/
 ├── app/                        # Next.js App Router pages
 │   ├── layout.tsx              # Root layout: fonts, ThemeProvider, Header, Footer
-│   ├── page.tsx                # Home: Hero + LatestPosts
-│   ├── sitemap.ts              # Dynamic sitemap generation
+│   ├── page.tsx                # Home: hero, currently, career at a glance, posts, contact
+│   ├── sitemap.ts              # Sitemap, generated at build time
+│   ├── opengraph-image.tsx     # Share image, rendered at build time
 │   ├── not-found.tsx           # Custom 404
 │   ├── blog/
 │   │   ├── page.tsx            # Blog index
@@ -66,12 +70,12 @@ src/
 │   └── cv/page.tsx             # Web resume + PDF download
 │
 ├── components/
-│   ├── layout/                 # Header, Footer, Container
-│   ├── home/                   # Hero, LatestPosts
-│   ├── blog/                   # PostCard, PostList, mdx/ (Callout etc.)
-│   ├── experience/             # Timeline, TimelineEntry
+│   ├── layout/                 # Header, MobileMenu, Footer, Container
+│   ├── home/                   # Hero, Currently, CareerGlance, TimelineRow, ContactBand
+│   ├── blog/                   # PostCard, PostList, EmptyState, mdx/ (Callout)
+│   ├── experience/             # ExperienceTimeline, ExperienceEntry, RoleCard, HighlightList, Duration
 │   ├── cv/                     # ResumeSection, DownloadButton
-│   └── ui/                     # AnimatedSection, ThemeToggle, SocialLinks, Tag
+│   └── ui/                     # Button, TextLink, Tag, SectionHeader, SkipLink, SocialLinks, ThemeToggle, AnimatedSection
 │
 ├── content/
 │   ├── blog/                   # MDX blog posts
@@ -79,10 +83,13 @@ src/
 │   └── experience.json         # Professional history + education
 │
 ├── lib/
-│   ├── blog.ts                 # getAllPosts(), getPostBySlug(), formatDate(), getReadingTime()
-│   ├── experience.ts           # getExperience(), formatDateRange(), getDuration()
+│   ├── blog.ts                 # Local MDX posts, merged with Substack posts by getAllBlogPosts()
+│   ├── rss.ts                  # Fetches the Substack feed at build time
+│   ├── experience.ts           # Loads experience.json
+│   ├── dates.ts                # Date ranges and durations (safe for client components)
 │   ├── constants.ts            # siteConfig, socialLinks, navItems
-│   └── rss.ts                  # Substack RSS stub (inactive)
+│   ├── metadata.ts             # Shared Open Graph metadata
+│   └── tokens.ts               # Light-theme colours for the build-time share image
 │
 ├── styles/
 │   └── globals.css             # Tailwind v4 @theme, CSS variables, dark mode, print styles
@@ -99,7 +106,7 @@ src/
 | Route | Description |
 |---|---|
 | `/` | Homepage — animated hero, social links, latest 3 blog posts |
-| `/blog` | Blog index — all published posts sorted by date |
+| `/blog` | Blog index — local and Substack posts, newest first |
 | `/blog/[slug]` | Individual blog post — MDX rendered with prose styling |
 | `/experience` | Career timeline — alternating layout on desktop, stacked on mobile |
 | `/cv` | Web resume with PDF download button, print-friendly CSS |
@@ -226,37 +233,32 @@ Use the semantic utilities (e.g. `text-text-primary`, `bg-surface`, `border-bord
 
 ## Deployment
 
-### Cloudflare Pages (CI/CD)
+### Cloudflare Workers (CI/CD)
 
-Pushes to `main` automatically deploy via `.github/workflows/deploy.yml`.
+`.github/workflows/deploy.yml` runs on every pull request and every push to `main`. It runs `npm ci`, `npm run lint`, `npm test` and `npm run build`; on `main` it then runs `wrangler deploy`, which uploads `out/` as the static assets of the `jbritton` Worker (see `wrangler.toml`). A failing check stops the deploy.
+
+Cloudflare's Workers Builds integration also builds every branch and posts a preview link on each pull request.
 
 **Required GitHub secrets:**
 
 | Secret | Description |
 |---|---|
-| `CLOUDFLARE_API_TOKEN` | API token with Cloudflare Pages edit permission |
+| `CLOUDFLARE_API_TOKEN` | API token with permission to edit Workers |
 | `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
-
-The workflow runs `npm ci && npm run build`, then deploys the `out/` directory to the `jbritton-uk` Cloudflare Pages project.
 
 ### Manual Deploy
 
 ```bash
 npm run build
-npx wrangler pages deploy out --project-name=jbritton-uk
+npx wrangler deploy
 ```
 
-### Custom Domain
+### Headers
 
-Configure `jbritton.uk` as a custom domain in the Cloudflare Pages project settings. DNS is already on Cloudflare.
+`public/_headers` sets the security headers, a one-year cache on hashed files under `/_next/static/`, and the content type of the share images.
 
 ---
 
-## Future: Substack RSS
+## Substack Posts
 
-A stub exists at `src/lib/rss.ts`. To activate:
-
-1. Set the `SUBSTACK_URL` constant to your feed URL (e.g. `https://yourname.substack.com/feed`)
-2. Call `getSubstackPosts()` from the blog index page
-3. Render external posts alongside local MDX posts with a badge linking to the original
-4. For automatic rebuilds on new Substack posts, add a GitHub Actions cron or Cloudflare Pages deploy hook
+`src/lib/rss.ts` reads the Substack feed at build time, and `getAllBlogPosts()` merges those posts with the local MDX posts; Substack posts link out to Substack. If the feed can't be fetched, the build carries on with local posts only. New Substack posts appear after the next build, so for automatic updates add a scheduled rebuild (a GitHub Actions cron, for example).
