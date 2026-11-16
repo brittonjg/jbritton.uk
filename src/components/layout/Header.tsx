@@ -43,9 +43,10 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [menuOpen]);
 
-  // Widening past the mobile breakpoint closes the menu.
+  // Widening past the mobile breakpoint closes the menu. 40rem is Tailwind's
+  // sm breakpoint, so this follows the visitor's text size like the CSS does.
   useEffect(() => {
-    const query = window.matchMedia("(min-width: 640px)");
+    const query = window.matchMedia("(width >= 40rem)");
     const onChange = () => query.matches && setMenuOpen(false);
     query.addEventListener("change", onChange);
     return () => query.removeEventListener("change", onChange);
@@ -80,7 +81,7 @@ export default function Header() {
           />
         </div>
 
-        {/* The only copy of the nav: inline from 640px, a panel below it. */}
+        {/* The only copy of the nav: inline from sm (40rem), a panel below it. */}
         <MobileMenu
           id={MENU_ID}
           open={menuOpen}
