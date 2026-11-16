@@ -9,16 +9,34 @@ interface PostCardProps {
 }
 
 /*
- * Blog post preview. The only card that lifts: translateY(-2px) and
- * shadow-raised on hover or keyboard focus, over duration-fast (.lift).
+ * Blog post preview. Only the title is a link, so a screen reader reads each
+ * card's link as just the post title. The link's ::after is stretched over
+ * the whole card, so a click anywhere on it still opens the post, and draws
+ * the keyboard focus ring around the card.
+ *
+ * The only card that lifts: translateY(-2px) and shadow-raised on hover or
+ * keyboard focus, over duration-fast (.lift).
  */
 export default function PostCard({ post, headingLevel: Heading = "h2" }: PostCardProps) {
-  const card = (
-    <article className="lift rounded-lg border border-border bg-surface p-6 shadow-card group-hover:border-accent-decor">
+  const linkClasses =
+    "text-text-primary transition-colors duration-fast group-hover:text-accent focus-visible:outline-none after:absolute after:inset-0 after:rounded-lg focus-visible:after:outline-2 focus-visible:after:outline-offset-2 focus-visible:after:outline-accent";
+
+  const title =
+    post.source === "substack" ? (
+      <a href={post.link} target="_blank" rel="noopener noreferrer" className={linkClasses}>
+        {post.title}
+        <span className="sr-only"> (opens in a new tab)</span>
+      </a>
+    ) : (
+      <Link href={`/blog/${post.slug}`} className={linkClasses}>
+        {post.title}
+      </Link>
+    );
+
+  return (
+    <article className="lift group relative rounded-lg border border-border bg-surface p-6 shadow-card hover:border-accent-decor has-[a:focus-visible]:border-accent-decor">
       <div className="flex items-start justify-between gap-3">
-        <Heading className="font-display text-title-post text-text-primary transition-colors duration-fast group-hover:text-accent">
-          {post.title}
-        </Heading>
+        <Heading className="font-display text-title-post text-text-primary">{title}</Heading>
         {post.source === "substack" && (
           <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-accent-subtle px-3 py-1 text-tag text-on-accent-subtle">
             Substack
@@ -52,21 +70,5 @@ export default function PostCard({ post, headingLevel: Heading = "h2" }: PostCar
         </div>
       )}
     </article>
-  );
-
-  const linkClasses = "group block rounded-lg";
-
-  if (post.source === "substack") {
-    return (
-      <a href={post.link} target="_blank" rel="noopener noreferrer" className={linkClasses}>
-        {card}
-      </a>
-    );
-  }
-
-  return (
-    <Link href={`/blog/${post.slug}`} className={linkClasses}>
-      {card}
-    </Link>
   );
 }

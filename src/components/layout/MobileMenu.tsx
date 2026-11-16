@@ -6,8 +6,8 @@ interface MobileMenuProps {
 }
 
 /*
- * Under 640px this wraps the header's nav in a panel that opens with a
- * grid-row transition (duration-base). From 640px up it is a plain wrapper,
+ * Below sm (40rem) this wraps the header's nav in a panel that opens with a
+ * grid-row transition (duration-base). From sm up it is a plain wrapper,
  * so the same nav markup serves both layouts. Closed, the panel is
  * visibility: hidden, which keeps its links out of the tab order.
  */
