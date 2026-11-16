@@ -8,8 +8,10 @@
  * belong; components use the semantic utilities these tokens generate.
  */
 @theme {
-  --font-sans: "Quicksand", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "DM Serif Display", ui-serif, Georgia, serif;
+  /* next/font sets --font-quicksand and --font-dm-serif on <html>. Each holds
+     the web font followed by its size-adjusted fallback face. */
+  --font-sans: var(--font-quicksand), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-dm-serif), ui-serif, Georgia, serif;
 
   /* ---------------------------------------------------------------------
    * Colour: light theme (default). Dark values live in the .dark block.

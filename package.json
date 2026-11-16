@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "generate-favicons": "node scripts/generate-favicons.mjs"
+    "generate-favicons": "node scripts/generate-favicons.mjs",
+    "generate-portrait": "node scripts/generate-portrait.mjs"
   },
   "dependencies": {
     "gray-matter": "^4.0.3",
